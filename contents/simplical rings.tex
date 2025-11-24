@@ -1,0 +1,2139 @@
+\section{Simplicial Rings}
+\subsection{Differential Graded Algebras}
+
+\begin{definition}[Differential graded algebra]\label{def:dga}
+Let $A$ be a commutative unital ring.  
+A \emph{differential graded algebra} (abbreviated \emph{dga}) over $A$ is a cochain complex
+\[
+(C^\ast, d) = \bigl(\cdots \to C^{n-1} \xrightarrow{d_{n-1}} C^n \xrightarrow{d_n} C^{n+1} \to \cdots\bigr)
+\]
+of $A$–modules together with a morphism of cochain complexes
+\[
+\mu : C^\ast \otimes_A C^\ast \longrightarrow C^\ast,
+\]
+called the \emph{multiplication}, which is \emph{unital} and \emph{associative} in the obvious sense.
+\end{definition}
+
+\begin{definition}[Graded commutative dga]
+A differential graded algebra $C^\ast$ over $A$ is said to be \emph{(graded) commutative} if it is endowed with a morphism of cochain complexes
+\[
+\tau : C^\ast \otimes_A C^\ast \longrightarrow C^\ast \otimes_A C^\ast, 
+\qquad
+x \otimes y \longmapsto (-1)^{\deg x\, \deg y} \, y \otimes x,
+\]
+where $\deg x = n$ whenever $x \in C^n$, such that the diagram
+\[
+\begin{tikzcd}
+C^\ast \otimes_A C^\ast \ar[r, "\tau"] \ar[dr, "\mu"'] & C^\ast \otimes_A C^\ast \ar[d, "\mu"] \\
+& C^\ast
+\end{tikzcd}
+\]
+commutes.  In that case, we say that $\mu$ is \emph{graded commutative}.
+The category of such objects is denoted by $\mathbf{cdga}_A$.
+\end{definition}
+
+\begin{remark}
+Equivalently, a dga can be described more concretely as a graded $A$–module
+\[
+C^\ast = \bigoplus_{n \ge 0} C^n
+\]
+equipped with
+\begin{enumerate}
+  \item an associative unital multiplication
+  \[
+  \cdot : C^n \times C^m \longrightarrow C^{n+m},
+  \]
+  making $\bigoplus_{i \ge 0} C^i$ a graded $A$–algebra; and
+  \item a differential $d : C^n \to C^{n+1}$ satisfying $d^2 = 0$
+        and the \emph{Leibniz rule}
+        \[
+        d(x \cdot y) = d(x)\cdot y + (-1)^{n}\, x \cdot d(y),
+        \qquad \text{for } x \in C^n,\, y \in C^m.
+        \]
+\end{enumerate}
+The unital and associative property simply means that $C^\ast$ is a graded $A$–algebra, and the differential is compatible with the multiplication via the Leibniz identity above.
+\end{remark}
+
+\textbf{Motivation and Origin of Differential Graded Algebras}
+
+The concept of a \emph{differential graded algebra} (dga) emerged as a natural unification
+of two fundamental ideas in mathematics:
+\begin{itemize}
+  \item the \emph{algebraic structure} of multiplication, coming from rings or algebras; and
+  \item the \emph{homological structure} of complexes, governed by a differential operator $d$ with $d^2=0$.
+\end{itemize}
+
+Historically, the notion appeared first in the work of Henri Cartan and Samuel Eilenberg
+(1950s) as part of \emph{homological algebra}. Their goal was to formalize the algebraic
+structures underlying cohomology theories.
+The ``graded'' part allows us to keep track of degrees of cochains,
+while the ``differential'' captures the boundary or coboundary operator from topology.
+
+A fundamental example is the \emph{de Rham complex} of a smooth manifold $M$:
+\[
+(\Omega^\ast(M), d),
+\]
+where $\Omega^n(M)$ is the space of differential $n$–forms and
+$d: \Omega^n(M) \to \Omega^{n+1}(M)$ is the exterior derivative.
+The wedge product $\wedge$ makes it into a graded-commutative algebra,
+and $d$ satisfies the Leibniz rule
+\[
+d(\alpha \wedge \beta)
+  = d\alpha \wedge \beta + (-1)^{\deg \alpha} \alpha \wedge d\beta,
+\]
+so $(\Omega^\ast(M), d, \wedge)$ is a commutative differential graded algebra.
+
+Later, in derived algebraic geometry (Illusie, 1970s), the notion of a dga became
+essential to define the \emph{cotangent complex} and the
+\emph{derived de~Rham complex}, replacing the smooth differential forms of geometry
+by algebraic analogues over arbitrary commutative rings.
+In modern language, dg–algebras are basic models for
+\emph{chain-level algebraic structures} in homotopical algebra and derived geometry.
+
+\textbf{Intuitive Motivation}
+
+A differential graded algebra encodes both algebra and homology in a single object:
+\begin{itemize}
+  \item the \textbf{grading} $C = \bigoplus_n C^n$ organizes data by degree;
+  \item the \textbf{differential} $d$ measures how elements of one degree
+        ``fail to be closed'' and leads to cohomology groups $H^n(C)$;
+  \item the \textbf{product} $\mu$ interacts with $d$ by the Leibniz rule,
+        allowing multiplicative structures to descend to cohomology.
+\end{itemize}
+
+Thus a cdga is a bridge between linear homological data (complexes)
+and nonlinear multiplicative phenomena (rings).
+For example, the cup product in singular cohomology can be realized
+at the level of a cdga model.
+
+\textbf{Examples}
+
+\begin{example}[De~Rham complex]
+Let $A = \mathbb{R}$ and let $C^\ast = \Omega^\ast(M)$ be the graded algebra of differential
+forms on a smooth manifold $M$ with exterior derivative $d$.
+Then $(\Omega^\ast(M), d, \wedge)$ is a commutative dga over $\mathbb{R}$.
+\end{example}
+
+\begin{example}[Singular cochains]
+For a topological space $X$, the singular cochain complex
+$C^\ast(X; A) = \Hom_{\mathbb{Z}}(C_\ast(X), A)$ with the cup product
+$\smile$ and the coboundary operator $d$ is a (graded) commutative dga over $A$.
+Its cohomology is the singular cohomology ring $H^\ast(X; A)$.
+\end{example}
+
+\begin{example}[Trivial dga]
+Any graded algebra $C^\ast$ concentrated in degree~$0$
+(e.g.~a usual commutative ring $A$ with $C^0=A$, $C^i=0$ for $i>0$)
+is a dga with $d=0$.  Its cohomology is itself.
+\end{example}
+
+\begin{example}[Koszul complex]
+Let $A$ be a commutative ring and $a_1,\dots,a_n\in A$.
+The Koszul complex $K^\ast(A; a_1,\dots,a_n)$
+is the exterior algebra $\bigwedge_A(e_1,\dots,e_n)$
+with differential
+\[
+d(e_i) = a_i, \qquad d(e_i \wedge e_j) = a_i e_j - a_j e_i, \ \text{etc.}
+\]
+It is a nontrivial but fundamental example of a commutative dga.
+\end{example}
+
+\begin{example}[Endomorphism algebra]
+Given any complex of $A$–modules $(M^\ast,d)$, the graded module
+$\Hom_A(M^\ast,M^\ast)$ carries a natural dga structure:
+the composition of maps gives multiplication, and the differential is
+\[
+d(f) = d_M \circ f - (-1)^{\deg f} f \circ d_M.
+\]
+This is typically \emph{not} commutative.
+\end{example}
+
+\textbf{Counterexamples and Noncommutative Cases}
+
+\begin{example}[Noncommutative dga]
+Let $A$ be any (possibly noncommutative) algebra and set
+$C^\ast = A[t, dt]$ where $t$ has degree~$0$ and $dt$ degree~$1$,
+with $d(t)=dt$ and $d(dt)=0$.
+Multiplication is the usual polynomial one.
+Then $(C^\ast, d)$ is a dga but \emph{not} commutative since $t\,dt \ne (-1)^1 dt\,t$.
+\end{example}
+
+\begin{example}[Failure of the Leibniz rule]
+If one defines a differential $d$ on a graded algebra $C^\ast$
+that does \emph{not} satisfy
+\[
+d(xy)=d(x)y+(-1)^{\deg x}x\,d(y),
+\]
+then even if $d^2=0$ the structure is no longer a dga.
+For instance, if $C^\ast$ is the graded algebra
+$\mathbb{R}[x]$ with $\deg x=1$ and $d(x)=1$, then $d^2=0$
+but $d(x^2)=2x\ne d(x)x - x d(x)=0$, so the Leibniz rule fails.
+\end{example}
+
+\begin{example}[Non-graded commutativity]
+Consider matrices $C^0=M_2(\mathbb{R})$, $C^1=M_2(\mathbb{R})$
+with $d$ given by $d(A)=BA-AB$ for some fixed matrix $B$.
+Then $d^2=0$ but multiplication by matrix product
+is noncommutative, so $(C^\ast,d)$ is a dga but not a cdga.
+\end{example}
+
+\textbf{Conceptual Summary}
+
+Differential graded algebras are central objects in homological algebra,
+rational homotopy theory, and derived algebraic geometry.  
+They serve as algebraic models of spaces (via the de~Rham or cochain cdga),
+and as tools to encode deformation problems (via Maurer--Cartan equations in dg–Lie algebras).
+The ``graded'' structure captures the hierarchy of forms or operations,
+and the ``differential'' connects adjacent layers, encoding boundary information.
+Commutative dg–algebras (cdgas) are the algebraic heart of derived geometry.
+
+\begin{proposition}\label{prop:cohomology-graded-algebra}
+Given a differential graded algebra $(C^\ast, d)$ over a commutative ring~$A$,
+its multiplication induces a natural structure of graded $A$–algebra on the
+cohomology groups
+\[
+H^\ast(C^\ast) := \bigoplus_{i \in \mathbb{Z}} H^i(C^\ast),
+\qquad
+H^i(C^\ast) = \frac{\ker(d : C^i \to C^{i+1})}{\operatorname{im}(d : C^{i-1} \to C^i)}.
+\]
+\end{proposition}
+
+\begin{proof}[Sketch of proof]
+Let $u,v \in C^\ast$ be homogeneous elements.
+
+\begin{enumerate}
+  \item[(1)] If both $u$ and $v$ are \emph{cocycles}, i.e.\ $du = dv = 0$, then by the
+  Leibniz rule for a dga,
+  \[
+  d(u \cdot v) = (du)\,v + (-1)^{\deg u}\,u\,(dv) = 0,
+  \]
+  so $u \cdot v$ is also a cocycle.
+
+  \item[(2)] Suppose $u,u'$ are cocycles differing by a coboundary:
+  $u' = u + d\xi$ for some $\xi \in C^{\deg u - 1}$.
+  Let $w$ be any cocycle ($dw=0$).
+  Then
+  \[
+  u'w - uw = (u + d\xi)w - uw = (d\xi)w
+     = d(\xi w) - (-1)^{\deg \xi} \xi\, d(w)
+     = d(\xi w),
+  \]
+  since $d(w)=0$. Hence $u'w$ and $uw$ differ by a coboundary.
+  The same argument applies to $wu$ and $wv$.
+\end{enumerate}
+
+These two facts ensure that the product
+\[
+[u]\,[v] := [u \cdot v]
+\]
+is \emph{well-defined} on cohomology, i.e.\ it depends only on the cohomology
+classes of $u$ and $v$, not on their chosen representatives.
+The associativity and unital properties are inherited directly from those of $C^\ast$.
+
+\medskip
+Alternatively, one may proceed functorially:
+the multiplication map of complexes
+\[
+\mu : C^\ast \otimes_A C^\ast \longrightarrow C^\ast
+\]
+induces a graded $A$–linear map on cohomology
+\[
+H^\ast(C^\ast \otimes_A C^\ast) \xrightarrow{H^\ast(\mu)} H^\ast(C^\ast),
+\]
+and by the canonical Künneth morphism
+\[
+H^\ast(C^\ast) \otimes_A H^\ast(C^\ast)
+\;\longrightarrow\;
+H^\ast(C^\ast \otimes_A C^\ast),
+\quad [u] \otimes [v] \longmapsto [u \otimes v],
+\]
+one obtains the induced multiplication
+$[u][v] = [u \cdot v]$ on $H^\ast(C^\ast)$.
+\end{proof}
+
+\begin{remark}
+Commutative differential graded algebras (cdga's) form a central class of objects in
+modern arithmetic geometry and derived algebraic geometry.
+Their cohomology rings inherit a natural graded–commutative algebra structure,
+but the category of cdga's is difficult to handle within ordinary homotopy theory.
+This motivates the development of higher and derived analogues such as
+$E_\infty$–algebras, which formalize ``commutativity up to coherent homotopy.''
+\end{remark}
+
+\textbf{Motivation and Interpretation}
+
+The purpose of Proposition~\ref{prop:cohomology-graded-algebra} is to show that
+the multiplicative structure of a differential graded algebra $(C^\ast,d)$
+descends to its cohomology.
+Intuitively, cohomology measures the ``closed'' elements up to ``exact'' ones,
+and Proposition~\ref{prop:cohomology-graded-algebra} ensures that this quotient
+inherits the same algebraic behavior.
+
+In topological or geometric terms, this explains why
+the cohomology of a manifold carries a natural ring structure:
+the product of closed differential forms is again closed,
+and changing a form by an exact one does not alter its class.
+This phenomenon generalizes to every dga and formalizes the ``ring of invariants''
+that remains after quotienting by the differential.
+
+\textbf{Comments and Remarks}
+
+\begin{remark}[Functorial nature]
+The construction is functorial:
+a morphism of dg–algebras $f : C^\ast \to D^\ast$ induces a morphism
+of graded algebras
+\[
+H^\ast(f) : H^\ast(C^\ast) \longrightarrow H^\ast(D^\ast).
+\]
+Thus, cohomology becomes a functor from the category of dg–algebras
+to the category of graded algebras.
+\end{remark}
+
+\begin{remark}[Graded commutativity]
+If $C^\ast$ is a \emph{commutative} dga (cdga),
+then its cohomology algebra is \emph{graded commutative}:
+for homogeneous classes $[u] \in H^p(C^\ast)$, $[v] \in H^q(C^\ast)$,
+\[
+[u][v] = (-1)^{pq} [v][u].
+\]
+This follows from the graded commutativity of multiplication in $C^\ast$ itself.
+\end{remark}
+
+\begin{remark}[Homotopy invariance]
+Since quasi-isomorphic dga’s have isomorphic cohomology rings,
+$H^\ast(C^\ast)$ is an invariant of the quasi-isomorphism class of $C^\ast$.
+This property is fundamental in derived algebraic geometry, where
+cohomology represents the ``classical shadow'' of a derived object.
+\end{remark}
+
+\textbf{Examples}
+
+\begin{example}[De~Rham cohomology]
+Let $C^\ast = (\Omega^\ast(M), d)$ be the de~Rham complex of a smooth manifold $M$.
+The wedge product $\wedge$ and the exterior derivative $d$
+turn $\Omega^\ast(M)$ into a commutative dga.
+Then Proposition~\ref{prop:cohomology-graded-algebra} implies that
+the de~Rham cohomology
+\[
+H^\ast_{\mathrm{dR}}(M)
+   = \frac{\ker(d : \Omega^\ast(M)\to\Omega^{\ast+1}(M))}
+          {\operatorname{im}(d : \Omega^{\ast-1}(M)\to\Omega^\ast(M))}
+\]
+is a graded-commutative algebra under the product induced by~$\wedge$.
+This is the familiar ``cup product'' of smooth cohomology.
+\end{example}
+
+\begin{example}[Singular cochains]
+For any topological space $X$, the singular cochain complex
+$C^\ast(X;A) = \Hom_\mathbb{Z}(C_\ast(X),A)$
+with differential $d$ and the cup product $\smile$
+is a commutative dga over $A$.
+Hence $H^\ast(X;A)$ is a graded-commutative algebra,
+recovering the standard cohomology ring of topology.
+\end{example}
+
+\begin{example}[Koszul complex]
+Let $A$ be a commutative ring and
+$a_1,\ldots,a_n \in A$.
+The Koszul complex
+$K^\ast(A; a_1,\ldots,a_n) =
+  \big(\bigwedge_A(e_1,\ldots,e_n), d\big)$
+with $d(e_i)=a_i$ is a commutative dga.
+The induced multiplication on
+$H^\ast(K^\ast(A;a_1,\ldots,a_n))$
+is the natural wedge product on cohomology classes.
+\end{example}
+
+\textbf{Counterexamples and Caveats}
+
+\begin{example}[Non-dga case]
+If $(C^\ast,d)$ is merely a complex of $A$-modules without a product
+satisfying the Leibniz rule,
+then one cannot define a ring structure on $H^\ast(C^\ast)$.
+For instance, let $C^\ast = A[x]$ with $\deg x=1$ and $d(x)=1$.
+Then $d^2=0$ but $d(x^2)=2x \neq 0$, violating the Leibniz rule.
+Hence $(C^\ast,d)$ is \emph{not} a dga and its cohomology has no algebra structure.
+\end{example}
+
+\begin{example}[Non-commutative case]
+Let $C^\ast = (M_2(\mathbb{R}) \oplus M_2(\mathbb{R})[1], d)$
+with $d(A)=BA-AB$ for some fixed matrix $B$.
+Then $d^2=0$ and $(C^\ast,d)$ is a (non-commutative) dga.
+Its cohomology $H^\ast(C^\ast)$ is a \emph{graded algebra},
+but not graded-commutative, because matrix multiplication is non-commutative.
+\end{example}
+
+\begin{example}[Failure of well-definedness without the Leibniz rule]
+If the differential does not satisfy $d(uv)=d(u)v+(-1)^{\deg u}u\,d(v)$,
+then the product on cohomology is not well defined:
+the product of cocycles may fail to be a cocycle,
+and changing representatives may change the class.
+\end{example}
+
+\textbf{Conceptual Summary}
+
+\begin{itemize}
+  \item The differential $d$ filters out ``exact'' elements from the algebra,
+        leaving a graded structure of \emph{closed} classes.
+  \item The Leibniz rule ensures compatibility of $d$ with multiplication,
+        guaranteeing that the quotient by exact elements is again an algebra.
+  \item In geometry, this explains why cohomology rings (e.g.\ de~Rham, singular,
+        or \v{C}ech) have a natural multiplicative structure.
+  \item In homological algebra, this property is crucial:
+        $H^\ast(C^\ast)$ carries algebraic operations that survive to homotopy level,
+        making it the ``first-order invariant'' of a dga.
+\end{itemize}
+
+In summary, the proposition is not merely a formal observation:
+it ensures that the algebraic and differential structures
+interact coherently enough for their ``homological shadow''
+$H^\ast(C^\ast)$ to remain an algebra.
+This compatibility is the starting point for the rich theory
+of derived and homotopical algebraic structures.
+
+\subsection{Tensor products and monoidal structures}\label{subsec:monoidal}
+
+
+It will be useful to formalize the presence of a ``tensor product'' and a ``unit object''
+together with the usual algebraic laws (associativity, unitality, commutativity up to coherent isomorphisms).
+
+\begin{definition}[Symmetric monoidal category]\label{def:symm-monoidal}
+A \emph{monoidal category} is the data
+\[
+\bigl(\mathcal{C}, \otimes, \mathbf{1}, \alpha,\lambda,\rho\bigr)
+\]
+where $\mathcal{C}$ is a category, $\otimes:\mathcal{C}\times\mathcal{C}\to\mathcal{C}$ is a bifunctor,
+$\mathbf{1}\in\mathcal{C}$ is the \emph{unit object}, and
+\begin{itemize}
+  \item $\alpha_{X,Y,Z}:(X\otimes Y)\otimes Z \xrightarrow{\ \cong\ } X\otimes(Y\otimes Z)$ (associator),
+  \item $\lambda_X:\mathbf{1}\otimes X \xrightarrow{\ \cong\ } X$ and $\rho_X:X\otimes \mathbf{1}\xrightarrow{\ \cong\ } X$ (left/right unitors),
+\end{itemize}
+are natural isomorphisms satisfying Mac~Lane's \emph{coherence axioms}:
+the \emph{pentagon} for $\alpha$ and the \emph{triangle} for $(\alpha,\lambda,\rho)$.
+A \emph{symmetric} monoidal category is a monoidal category endowed with a natural isomorphism
+\[
+\sigma_{X,Y}:X\otimes Y \xrightarrow{\ \cong\ } Y\otimes X
+\]
+(the \emph{symmetry} or braiding) satisfying $\sigma_{Y,X}\circ \sigma_{X,Y}=\mathrm{id}_{X\otimes Y}$ and the standard hexagon coherence.
+\end{definition}
+
+\begin{example}[Sets]\label{ex:sets-monoidal}
+The category $\mathbf{Set}$ with cartesian product $X\times Y$ and unit the singleton $\{\ast\}$ is symmetric monoidal.
+The constraints $\alpha,\lambda,\rho,\sigma$ are the evident bijections; Mac~Lane coherence reduces to tautological set equalities.
+\end{example}
+
+\begin{example}[Modules, vector spaces, algebras]\label{ex:modules-monoidal}
+Let $R$ be a commutative ring. The categories $\mathbf{Ab}$, $R\text{-}\mathbf{Mod}$, and $R\text{-}\mathbf{Alg}$ become symmetric monoidal
+under the usual tensor product $\otimes_R$, with unit object $R$ (viewed in degree~$0$ for algebras).
+The associator/unitors are the canonical universal isomorphisms; symmetry is the flip $x\otimes y \mapsto y\otimes x$.
+\end{example}
+
+\begin{example}[Levelwise tensor on simplicial objects]\label{ex:sC-monoidal}
+If $(\mathcal{C},\otimes,\mathbf{1})$ is (symmetric) monoidal, then the category of simplicial objects $s\mathcal{C}=\mathrm{Fun}(\Delta^{\mathrm{op}},\mathcal{C})$
+is (symmetric) monoidal via the \emph{levelwise} tensor:
+\[
+(X\otimes Y)_n := X_n \otimes Y_n, \qquad (\mathbf{1})_n := \mathbf{1}.
+\]
+The faces/degeneracies act componentwise and the constraints $(\alpha,\lambda,\rho,\sigma)$ are inherited levelwise from $\mathcal{C}$.
+\end{example}
+
+\begin{proof}[Proof (Example~\ref{ex:sC-monoidal})]
+Define $(X\otimes Y)(\theta) := X(\theta)\otimes Y(\theta)$ for $\theta:[m]\to[n]$ in $\Delta$. Functoriality holds since
+$(X(\theta_1\circ\theta_2)\otimes Y(\theta_1\circ\theta_2))=(X(\theta_1)\circ X(\theta_2))\otimes (Y(\theta_1)\circ Y(\theta_2))$
+and the bifunctor axiom yields $(f_1\circ f_2)\otimes(g_1\circ g_2)=(f_1\otimes g_1)\circ(f_2\otimes g_2)$.
+Set $(\alpha_{X,Y,Z})_n := \alpha_{X_n,Y_n,Z_n}$, and similarly for $\lambda,\rho,\sigma$.
+Naturality and the coherence diagrams in $s\mathcal{C}$ commute levelwise because they commute in $\mathcal{C}$.
+Thus $s\mathcal{C}$ inherits a symmetric monoidal structure.
+\end{proof}
+
+\begin{example}[Chain complexes and the Koszul tensor]\label{ex:complexes-monoidal}
+Let $R$ be a commutative ring and $\Ch(R)$ the category of (cochain) complexes of $R$–modules.
+For $X^\ast,Y^\ast\in\Ch(R)$ define the \emph{total} tensor complex $(X^\ast\otimes_R Y^\ast,d)$ by
+\[
+(X\otimes Y)^n := \bigoplus_{i+j=n} X^i \otimes_R Y^j,
+\qquad
+d(x\otimes y) := d_X x \otimes y \;+\; (-1)^{|x|}\, x \otimes d_Y y,
+\]
+with unit object $R$ concentrated in degree $0$.
+\end{example}
+
+\begin{proposition}\label{prop:koszul-d2}
+With the differential above, $d^2=0$, so $X^\ast\otimes_R Y^\ast$ is a complex.
+Moreover, $\Ch(R)$ becomes a symmetric monoidal category with:
+\begin{align*}
+\alpha_{X,Y,Z}&:\ (X\otimes Y)\otimes Z \xrightarrow{\ \cong\ } X\otimes (Y\otimes Z),\\
+\lambda_X&:\ R\otimes X \xrightarrow{\ \cong\ } X,\qquad
+\rho_X:\ X\otimes R \xrightarrow{\ \cong\ } X,\\
+\sigma_{X,Y}&:\ X\otimes Y \xrightarrow{\ \cong\ } Y\otimes X,\quad
+\sigma(x\otimes y) := (-1)^{|x||y|}\, y\otimes x,
+\end{align*}
+each a chain isomorphism (the \emph{Koszul sign rule}).
+\end{proposition}
+
+\begin{proof}
+\textbf{(i) $d^2=0$.}
+Let $x\in X^{|x|}$ and $y\in Y^{|y|}$. Then
+\[
+\begin{aligned}
+d^2(x\otimes y)
+&= d\bigl(d_X x \otimes y + (-1)^{|x|} x\otimes d_Y y\bigr)\\
+&= d_X^2 x \otimes y \;+\; (-1)^{|x|+1} d_X x \otimes d_Y y \;+\; (-1)^{|x|} d_X x \otimes d_Y y \;+\; (-1)^{2|x|} x \otimes d_Y^2 y\\
+&= 0+ \bigl((-1)^{|x|+1}+(-1)^{|x|}\bigr)\, d_X x\otimes d_Y y + 0 \;=\; 0,
+\end{aligned}
+\]
+since $d_X^2=d_Y^2=0$ and the middle signs cancel.
+
+\smallskip
+\textbf{(ii) Monoidal constraints.}
+At the graded level, $\alpha,\lambda,\rho$ are the canonical universal isomorphisms of (graded) $R$–modules.
+We must check they are \emph{chain maps}, i.e.\ commute with the differentials.
+For $\lambda_X: R\otimes X \to X$, note $R$ is concentrated in degree $0$ and $d_R=0$, so
+$d\circ \lambda(r\otimes x)=d_X(rx) = r\,d_X x = \lambda\bigl(d_R r\otimes x + (-1)^{0} r\otimes d_X x\bigr)=\lambda\circ d(r\otimes x)$.
+Similar for $\rho$.
+For $\alpha$, write $((x\otimes y)\otimes z)\mapsto x\otimes (y\otimes z)$; both sides’ differentials expand with the Koszul rule and match termwise.
+
+\smallskip
+\textbf{(iii) Symmetry and Koszul sign.}
+Define $\sigma(x\otimes y)=(-1)^{|x||y|} y\otimes x$.
+Then
+\[
+\begin{aligned}
+d\,\sigma(x\otimes y)
+&= d\bigl((-1)^{|x||y|} y\otimes x\bigr)
+= (-1)^{|x||y|}\bigl(d_Y y\otimes x + (-1)^{|y|} y\otimes d_X x\bigr),\\
+\sigma\,d(x\otimes y)
+&= \sigma\bigl(d_X x\otimes y + (-1)^{|x|} x\otimes d_Y y\bigr)\\
+&= (-1)^{(|x|+1)|y|} y\otimes d_X x \;+\; (-1)^{|x|(|y|+1)} d_Y y\otimes x\\
+&= (-1)^{|x||y|+|y|} y\otimes d_X x \;+\; (-1)^{|x||y|} d_Y y\otimes x,
+\end{aligned}
+\]
+which equals $d\,\sigma(x\otimes y)$. Hence $\sigma$ is a chain isomorphism and $(\Ch(R),\otimes,R,\alpha,\lambda,\rho,\sigma)$ is symmetric monoidal.
+\end{proof}
+
+\begin{remark}[Analyst's view: why the signs?]\label{rmk:koszul-why}
+The Koszul rule encodes graded-commutativity \emph{at the chain level} so that:
+(i) the total differential squares to zero, and
+(ii) the symmetry $\sigma$ is a \emph{chain} map (not just graded).
+These are precisely the conditions needed for the homotopy category $\mathrm{D}(R)$
+to inherit a symmetric monoidal structure where $X^\ast\otimes^\mathbf{L} Y^\ast$ is computed by projective (or flat) resolutions.
+\end{remark}
+
+\begin{remark}[Compatibility with cohomology]
+If $X^\ast,Y^\ast$ are dg–algebras (resp.\ cdga’s), then $X^\ast\otimes_R Y^\ast$
+is naturally a dg–algebra (resp.\ cdga) with product
+$(x\otimes y)\cdot(x'\otimes y') := (-1)^{|y||x'|}(xx')\otimes(yy')$.
+The differential satisfies Leibniz by construction, and the symmetry is again Koszul.
+Passing to cohomology yields the usual cup product on $H^\ast(X^\ast)\otimes H^\ast(Y^\ast)$.
+\end{remark}
+
+\subsection{Monoid objects in a monoidal category}\label{subsec:monoid-objects}
+
+\begin{definition}[Monoid object]\label{def:monoid-object}
+Let $(\mathcal{C},\otimes,\mathbf{1},\alpha,\lambda,\rho)$ be a monoidal category.
+A \emph{monoid object} (or simply a \emph{monoid}) is a triple $(M,\mu,\eta)$ where
+$M\in\mathcal{C}$, $\mu:M\otimes M\to M$ (multiplication) and $\eta:\mathbf{1}\to M$ (unit)
+are morphisms in $\mathcal{C}$ such that the following diagrams commute:
+
+
+\[\begin{tikzcd}
+(M\otimes M)\otimes M \ar[r, "\alpha_{M,M,M}"] \ar[d, "\mu\otimes \Id_M"'] &
+M\otimes (M\otimes M) \ar[d, "\Id_M\otimes \mu"] \\
+M\otimes M \ar[r, "\mu"'] & M
+\end{tikzcd}\]
+
+\[\begin{tikzcd}
+\mathbf{1}\otimes M \ar[r, "\lambda_M"] \ar[dr, "\eta\otimes \Id_M"'] & M \\
+& M\otimes M \ar[u, "\mu"']
+\end{tikzcd}\]
+
+\[\begin{tikzcd}
+M\otimes \mathbf{1} \ar[r, "\rho_M"] \ar[dr, "\Id_M\otimes \eta"'] & M \\
+& M\otimes M \ar[u, "\mu"']
+\end{tikzcd}\]
+
+The first is \emph{associativity}; the other two are \emph{left/right unitality}.
+\end{definition}
+
+\begin{definition}[Commutative (symmetric) monoid object]\label{def:commutative-monoid}
+If $(\mathcal{C},\otimes,\mathbf{1},\sigma)$ is symmetric monoidal, a monoid $(M,\mu,\eta)$ is
+\emph{commutative} if
+\[
+\mu \;=\; \mu\circ \sigma_{M,M}: M\otimes M \longrightarrow M,
+\]
+i.e.\ $\mu$ is compatible with the symmetry (the \emph{twist}).
+\end{definition}
+
+\begin{remark}[Algebra objects]
+A (commutative) monoid object in $\mathcal{C}$ is often called a (commutative) \emph{algebra object} of $\mathcal{C}$.
+The data $\mu,\eta$ are morphisms in $\mathcal{C}$, so they must respect whatever structure morphisms carry in $\mathcal{C}$ (e.g.\ grading, differentials, etc.).
+\end{remark}
+
+\begin{example}[Recovering ordinary monoids]\label{ex:monoid-in-Set}
+In $(\mathbf{Set},\times,\{\ast\})$, a monoid object is precisely an ordinary monoid:
+$\mu: M\times M\to M$ is a binary operation, $\eta:\{\ast\}\to M$ picks out the unit $e$,
+the associativity diagram says $(ab)c=a(bc)$, and the unit diagrams say $ea=a=ae$.
+\end{example}
+
+\begin{example}[Algebras over a ring]\label{ex:algebra-object-in-RMod}
+Let $R$ be a commutative ring. In $(R\text{-}\mathbf{Mod},\otimes_R,R)$, a monoid object $(A,\mu,\eta)$
+is an associative unital $R$–algebra:
+$\mu: A\otimes_R A\to A$ is $R$–bilinear multiplication and $\eta:R\to A$ picks the unit $1_A=\eta(1)$.
+If the monoidal structure is symmetric, the commutativity condition $\mu=\mu\circ \sigma$ is exactly
+$ab=ba$ for all $a,b\in A$.
+\end{example}
+
+\begin{example}[DG–algebras as monoid objects]\label{ex:dga-as-monoid-object}
+In $(\Ch(R),\otimes,R)$ (Example~\ref{ex:complexes-monoidal}), a monoid object $(C^\ast,\mu,\eta)$
+is precisely a \emph{differential graded algebra} (dga):
+\begin{itemize}
+  \item $\mu$ is a morphism of complexes, hence a chain map of degree $0$, so for homogeneous $x,y$
+  \[
+  d\bigl(\mu(x\otimes y)\bigr)\;=\;\mu\bigl(d(x\otimes y)\bigr)
+  \;=\;\mu(d x\otimes y + (-1)^{|x|} x\otimes d y),
+  \]
+  i.e.\ the Leibniz rule $d(xy)=d(x)\,y+(-1)^{|x|}x\,d(y)$ holds;
+  \item the associativity and unital diagrams give associativity and a unit in the graded sense.
+\end{itemize}
+If moreover $(\Ch(R),\otimes,R,\sigma)$ is taken with the Koszul symmetry
+$\sigma(x\otimes y)=(-1)^{|x||y|}y\otimes x$, then a \emph{commutative} monoid object is a \emph{cdga}:
+$xy=(-1)^{|x||y|}yx$.
+\end{example}
+
+\begin{example}[Simplicial monoids]\label{ex:simplicial-monoid}
+If $(\mathcal{C},\otimes,\mathbf{1})$ is monoidal, then by Example~\ref{ex:sC-monoidal}, $(s\mathcal{C},\otimes,\mathbf{1})$ is monoidal levelwise. A monoid object in $s\mathcal{C}$ is a simplicial object $M_\bullet$ together with face/degeneracy-compatible
+$\mu_\bullet: M_\bullet\otimes M_\bullet\to M_\bullet$ and $\eta_\bullet:\mathbf{1}\to M_\bullet$, i.e.\ a \emph{simplicial monoid}.
+In particular, simplicial rings are monoid objects in $s(R\text{-}\mathbf{Mod})$.
+\end{example}
+
+\begin{proposition}[Morphisms and forgetful functor]\label{prop:monoid-morphisms}
+A morphism of monoid objects $f:(M,\mu,\eta)\to (N,\nu,\eta')$ in $\mathcal{C}$ is a morphism $f:M\to N$ such that
+\[
+f\circ \mu \;=\; \nu\circ (f\otimes f)
+\qquad\text{and}\qquad
+f\circ \eta \;=\; \eta'.
+\]
+Monoid objects and their morphisms form a category $\Mon(\mathcal{C})$, and the forgetful functor
+$U:\Mon(\mathcal{C})\to \mathcal{C}$ is faithful and creates limits that exist in $\mathcal{C}$.
+\end{proposition}
+
+\begin{proof}[Verification]
+Faithfulness of $U$ is immediate. Limits in $\Mon(\mathcal{C})$ are computed in $\mathcal{C}$ with the induced pointwise multiplication and unit, checked by the universal property (standard). The equations defining a morphism encode multiplicativity and unit-preservation, matching the usual algebra homomorphism axioms in Examples~\ref{ex:algebra-object-in-RMod} and~\ref{ex:dga-as-monoid-object}.
+\end{proof}
+
+\begin{remark}[Coherence and uniqueness of parenthesization]
+By Mac~Lane's coherence theorem, in a monoidal category every diagram built from $\alpha,\lambda,\rho$ that should commute \emph{does} commute. Consequently, for a monoid object the two composites $M^{\otimes n}\to M$ obtained by multiplying $n$ factors are uniquely determined (independent of parenthesization).
+\end{remark}
+
+\begin{remark}[Commutative vs.\ symmetric]
+In a merely braided monoidal category, one can still define \emph{commutative} monoids via the braiding; in a symmetric monoidal category this reduces to the usual symmetry and coincides with the standard notion of a commutative algebra object.
+\end{remark}
+
+\begin{remark}[Why this abstraction matters]
+This formalism lets us speak uniformly about rings, algebras, graded algebras, dg–algebras, sheaves of algebras, $E_\infty$–algebras, etc., as \emph{monoids} inside different ambient monoidal categories. It is the language that makes derived and homotopical constructions functorial and invariant under equivalences.
+\end{remark}
+
+\textbf{Examples of monoid objects}\label{subsec:monoid-examples}
+
+\begin{example}[Monoids in \texorpdfstring{$\mathbf{Set}$}{Set}]\label{ex:monoid-in-Set}
+A monoid object in the symmetric monoidal category $(\mathbf{Set},\times,\{\ast\})$
+is precisely an ordinary algebraic monoid.
+
+Indeed, let $(M,\mu,\eta)$ be such a monoid object.  
+Then $\eta:\{\ast\}\to M$ selects an element $e:=\eta(\ast)\in M$,  
+and $\mu:M\times M\to M$ defines a binary operation
+\[
+(x,y)\longmapsto \mu(x,y)=:xy.
+\]
+The commutative diagrams of Definition~\ref{def:monoid-object} express exactly
+the usual axioms:
+\[
+(xy)z = x(yz),
+\qquad
+ex = x = xe,
+\qquad \forall\,x,y,z\in M.
+\]
+Conversely, every monoid $(M,\cdot,e)$ in the classical sense
+determines a monoid object in $(\mathbf{Set},\times,\{\ast\})$
+by setting $\mu(x,y)=x\cdot y$ and $\eta(\ast)=e$.
+\end{example}
+
+\begin{proof}[Verification]
+Associativity in the diagram
+\[
+(M\times M)\times M \xrightarrow{\ \mu\times \Id\ } M\times M \xrightarrow{\ \mu\ } M
+\quad=\quad
+M\times (M\times M) \xrightarrow{\ \Id\times \mu\ } M\times M \xrightarrow{\ \mu\ } M
+\]
+means $(xy)z=x(yz)$.
+The left and right unit diagrams translate to
+$\mu(e,x)=x=\mu(x,e)$.
+Hence the categorical and algebraic notions coincide.
+\end{proof}
+
+\begin{remark}
+This example shows that the categorical definition of monoid object
+is a direct abstraction of the classical algebraic one.
+In this sense, monoid objects \emph{generalize} monoids to any monoidal setting.
+\end{remark}
+
+% ---------------------------------------------------------------
+
+\begin{example}[Monoids in abelian groups and modules]\label{ex:monoid-in-Ab}
+In the monoidal category $(\mathbf{Ab},\otimes_\mathbb{Z},\mathbb{Z})$
+a monoid object $(R,\mu,\eta)$ consists of:
+\begin{itemize}
+  \item a multiplication $\mu:R\otimes_\mathbb{Z}R\to R$, i.e.\ a bilinear map $(x,y)\mapsto xy$;
+  \item a unit $\eta:\mathbb{Z}\to R$ corresponding to an element $1_R=\eta(1)$.
+\end{itemize}
+The diagrams for associativity and unitality state that $(R,\mu,\eta)$
+is an associative unital ring.  
+If $R$–\textbf{Mod} replaces $\mathbf{Ab}$, a monoid object is an \emph{$R$–algebra}.
+\end{example}
+
+\begin{proof}[Verification]
+Bilinearity follows from the tensor product’s universal property.
+Associativity and the unit axioms hold because $\mu$ and $\eta$
+satisfy the same diagrams as in the classical definition of a ring
+and $R$–algebra.  Conversely, any associative unital ring defines a monoid object
+by the canonical maps
+\(\mu(x\otimes y)=xy,\ \eta(1)=1_R.\)
+\end{proof}
+
+\begin{remark}
+The passage from sets to abelian groups (or modules) replaces
+the cartesian product by the tensor product, ensuring bilinearity.
+This shows that the monoidal structure encodes the kind of
+``linearity'' required of the multiplication.
+\end{remark}
+
+% ---------------------------------------------------------------
+
+\begin{example}[Simplicial monoids]\label{ex:monoid-in-sC}
+Let $(\mathcal{C},\otimes,\mathbf{1})$ be a monoidal category.
+Then the category $s\mathcal{C}$ of simplicial objects inherits
+a levelwise monoidal structure (Example~\ref{ex:sC-monoidal}).
+A monoid object $(M_\bullet,\mu_\bullet,\eta_\bullet)$ in $s\mathcal{C}$ is
+a simplicial object in $\mathcal{C}$ such that each level
+$M_n$ carries a monoid structure in $\mathcal{C}$ and
+the face and degeneracy maps
+\[
+d_i : M_n \longrightarrow M_{n-1},
+\qquad
+s_j : M_n \longrightarrow M_{n+1}
+\]
+are morphisms of monoids.
+Thus $M_\bullet$ is the \emph{simplicial version} of a monoid in $\mathcal{C}$.
+For example, simplicial rings are monoid objects in $s(R\text{-}\mathbf{Mod})$.
+\end{example}
+
+\begin{proof}[Verification]
+Because $(M\otimes N)_n = M_n\otimes N_n$,
+the multiplication $\mu_\bullet$ and unit $\eta_\bullet$ must be collections
+of morphisms $\mu_n:M_n\otimes M_n\to M_n$, $\eta_n:\mathbf{1}\to M_n$
+that satisfy the same coherence diagrams at each level.
+Naturality of the face and degeneracy maps ensures that all these
+multiplications are compatible across simplicial degrees.
+\end{proof}
+
+\begin{remark}
+This categorical perspective provides a unifying framework for 
+\emph{simplicial algebras}, \emph{simplicial rings}, or \emph{simplicial groups}:
+they are simply monoid (or group) objects in $s\mathcal{C}$.
+\end{remark}
+
+% ---------------------------------------------------------------
+
+\begin{example}[Differential graded algebras]\label{ex:monoid-in-Ch}
+Let $R$ be a commutative ring and consider the symmetric monoidal category
+$(\Ch(R),\otimes,R,\sigma)$ of chain complexes of $R$–modules
+with the Koszul sign rule $\sigma(x\otimes y)=(-1)^{|x||y|}y\otimes x$.
+A monoid object $(C^\ast,\mu,\eta)$ in this category is
+a \emph{differential graded algebra (dga)}:
+\begin{itemize}
+  \item $\mu:C^\ast\otimes C^\ast\to C^\ast$ is a morphism of complexes,
+        which is equivalent to the Leibniz rule
+        \[
+        d(xy)=d(x)\,y + (-1)^{|x|}x\,d(y);
+        \]
+  \item $\eta:R\to C^\ast$ picks the unit element $1\in C^0$;
+  \item associativity and unit diagrams ensure $xy\cdot z=x\cdot(yz)$ and $1x=x=x1$.
+\end{itemize}
+If $\mu=\mu\circ\sigma$, then $xy=(-1)^{|x||y|}yx$, making $C^\ast$ a
+\emph{commutative differential graded algebra (cdga)}.
+\end{example}
+
+\begin{proof}[Verification]
+Because $\mu$ is a morphism of complexes, $d\circ \mu = \mu\circ d_{C\otimes C}$.
+Expanding $d_{C\otimes C}(x\otimes y)=d(x)\otimes y+(-1)^{|x|}x\otimes d(y)$
+gives $d(xy)=d(x)y+(-1)^{|x|}x\,d(y)$.
+The associativity and unit diagrams are inherited directly from the monoidal structure,
+and the symmetry condition $\mu=\mu\circ\sigma$ yields graded commutativity.
+\end{proof}
+
+\begin{remark}
+This example shows that all of the ``algebraic'' objects encountered so far—
+monoids, rings, algebras, dg–algebras—are instances of a single universal notion:
+a \emph{monoid object} in a suitable monoidal category.
+\end{remark}
+
+\begin{example}[Derived Tensor Product]\label{ex:derived-tensor}
+Let $R$ be a commutative ring and let $\mathbf{D}(R)$ denote the (unbounded) derived
+category of complexes of $R$–modules, obtained from the homotopy category by inverting quasi-isomorphisms.
+We endow $\mathbf{D}(R)$ with a symmetric monoidal structure via the \emph{derived tensor product}
+\[
+-\otimes_R^{\mathbf L}- \;:\; \mathbf{D}(R)\times \mathbf{D}(R)\longrightarrow \mathbf{D}(R).
+\]
+
+\paragraph{Models (resolutions).}
+There are several equivalent constructions. For the unbounded derived category, the most robust one uses
+\emph{K-flat} or \emph{K-projective} resolutions.
+
+\begin{definition}[K-flat and K-projective complexes]
+A complex $F^\ast$ of $R$–modules is \emph{K-flat} if for every acyclic complex $A^\ast$, the tensor complex
+$F^\ast\otimes_R A^\ast$ is acyclic. A complex $P^\ast$ is \emph{K-projective} if
+$\Hom_{\mathrm{Ch}(R)}(P^\ast,-)$ sends quasi-isomorphisms to quasi-isomorphisms (equivalently,
+$\Hom(P^\ast, A^\ast)$ is acyclic for every acyclic $A^\ast$).
+\end{definition}
+
+\begin{remark}
+Every complex admits a quasi-isomorphism from a K-projective complex and a quasi-isomorphism to a K-flat complex
+(Spaltenstein's theorem). Bounded below complexes of flat (resp.\ projective) modules are K-flat (resp.\ K-projective).
+\end{remark}
+
+\paragraph{Definition of $A\otimes_R^{\mathbf L}B$.}
+Given $A,B\in \mathbf{D}(R)$, choose a K-flat resolution $Q^\ast \xrightarrow{\ \simeq\ } B$ (or K-projective resolution
+$P^\ast \xrightarrow{\ \simeq\ } A$). Define
+\[
+A\otimes_R^{\mathbf L} B \ :=\ A \otimes_R Q^\ast \ \in \mathbf{D}(R)
+\qquad
+\text{(or equivalently $P^\ast\otimes_R B$ or $P^\ast\otimes_R Q^\ast$).}
+\]
+This yields a bifunctor well-defined up to canonical isomorphism in $\mathbf{D}(R)$.
+
+\paragraph{Well-definedness.}
+\end{example}
+
+\begin{proposition}[Independence of resolutions]\label{prop:derived-tensor-welldef}
+Let $Q_1^\ast \xrightarrow{\simeq} B$ and $Q_2^\ast \xrightarrow{\simeq} B$ be K-flat resolutions. Then
+$A\otimes_R Q_1^\ast \xrightarrow{\ \sim\ } A\otimes_R Q_2^\ast$ is a quasi-isomorphism, naturally in $A$.
+Similarly, if $P_1^\ast\xrightarrow{\simeq} A$ and $P_2^\ast\xrightarrow{\simeq} A$ are K-projective, then
+$P_1^\ast\otimes_R B \xrightarrow{\ \sim\ } P_2^\ast\otimes_R B$ is a quasi-isomorphism, naturally in $B$.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+Consider a zigzag $Q_1^\ast \xleftarrow{\simeq} Z^\ast \xrightarrow{\simeq} Q_2^\ast$ in the homotopy category
+connecting the two K-flat resolutions (obtained by a factorization/roof). Tensoring with any $A$ preserves
+quasi-isomorphisms because $Q_i^\ast$ are K-flat and tensoring with $A$ preserves quasi-isomorphisms between
+K-flat complexes. Hence $A\otimes_R Q_1^\ast \leftarrow A\otimes_R Z^\ast \to A\otimes_R Q_2^\ast$ is a zigzag
+of quasi-isomorphisms. The K-projective case is dual: applying $\Hom(P_i^\ast,-)$ preserves quasi-isomorphisms,
+and by adjunction one reduces to the K-flat argument.
+\end{proof}
+
+\begin{proposition}[Bifunctoriality and symmetry]\label{prop:derived-tensor-bifunctor}
+The operation $-\otimes_R^{\mathbf L}-$ descends to a bifunctor on $\mathbf{D}(R)$, with unit object $R$
+(concentrated in degree $0$), associative and symmetric up to canonical isomorphism. Thus $(\mathbf{D}(R),\otimes_R^{\mathbf L},R)$
+is a symmetric monoidal category.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+Choose K-flat (or K-projective) resolutions functorially (up to homotopy). The associativity and symmetry constraints
+are induced from the usual tensor product on complexes together with the Koszul sign rule; independence of choices follows
+from Proposition~\ref{prop:derived-tensor-welldef}. The unit constraints are induced by $R\otimes_R^{\mathbf L} A\simeq A \simeq A\otimes_R^{\mathbf L} R$,
+since $R$ is K-flat and the underived tensor with $R$ agrees with the identity.
+\end{proof}
+
+\begin{theorem}[Homology and $\Tor$]\label{thm:Tor-from-derived-tensor}
+For $A,B\in \mathbf{D}(R)$ (or for ordinary $R$–modules viewed as complexes concentrated in degree~$0$), there are natural isomorphisms
+\[
+H_i\bigl(A\otimes_R^{\mathbf L} B\bigr) \;\cong\; \Tor^R_i(A,B)\qquad (i\in \mathbb{Z}),
+\]
+in particular $H_0\bigl(A\otimes_R^{\mathbf L} B\bigr)\cong A\otimes_R B$.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+Take a K-flat resolution $Q^\ast\xrightarrow{\simeq} B$. Then $A\otimes_R^{\mathbf L} B \simeq A\otimes_R Q^\ast$,
+and the homology of $A\otimes_R Q^\ast$ computes the left-derived functors of $A\otimes_R-$ evaluated at $B$.
+When $A,B$ are ordinary modules in degree $0$, this recovers the classical definition of $\Tor$ via a flat (or projective) resolution of one input.
+The $H_0$ statement follows because $Q^\ast \to B$ is a quasi-isomorphism and the degree-$0$ homology of $A\otimes_R Q^\ast$ is $A\otimes_R B$.
+\end{proof}
+
+\begin{remark}[Indexing conventions]
+We use homological grading, so $H_i$ sits in (homological) degree $i\le 0$ when starting with nonnegative cochain degrees.
+If cohomological grading is preferred, one writes $H^{-i}(A^\bullet\otimes_R^{\mathbf L} B^\bullet) \cong \Tor^R_i(A^\bullet,B^\bullet)$.
+\end{remark}
+
+\begin{remark}[Resolving one factor suffices]
+If either $A$ or $B$ is K-flat, then $A\otimes_R^{\mathbf L} B \simeq A\otimes_R B$ (no resolution of the other factor needed).
+For bounded-below complexes of flat modules, the ordinary tensor already computes the derived tensor.
+\end{remark}
+
+\begin{remark}[Compatibility with algebra structures]
+If $A^\ast$ and $B^\ast$ are (commutative) dg–algebras over $R$, then $A^\ast\otimes_R^{\mathbf L} B^\ast$ acquires a natural structure
+of (commutative) dg–algebra in $\mathbf{D}(R)$; on cohomology this yields the familiar K\"unneth multiplicative structure
+under the Koszul sign rule.
+\end{remark}
+
+\subsection{From simplicial rings to differential graded algebras}\label{subsec:simplicial-to-dga}
+
+Let $\mathcal{A}$ be an abelian category endowed with a symmetric monoidal structure
+$(\otimes, \mathbf{1}, \alpha, \lambda, \rho, \sigma)$.
+Both the category of simplicial objects $s\mathcal{A} = \Fun(\Delta^{\mathrm{op}}, \mathcal{A})$
+and the category of non-negatively graded chain complexes $\Ch_{\ge 0}(\mathcal{A})$
+inherit symmetric monoidal structures from that of $\mathcal{A}$:
+\[
+(X\otimes Y)_n = X_n\otimes Y_n, \qquad
+(X\otimes Y)_n = \bigoplus_{p+q=n} X_p\otimes Y_q
+\]
+respectively for the simplicial and chain versions.
+
+By the \emph{Dold–Kan correspondence}, these two categories are equivalent as abelian categories:
+\[
+N: s\mathcal{A} \xrightarrow{\ \sim\ } \Ch_{\ge 0}(\mathcal{A}),
+\qquad
+\Gamma: \Ch_{\ge 0}(\mathcal{A}) \xrightarrow{\ \sim\ } s\mathcal{A},
+\]
+where $N$ is the \emph{normalization functor} and $\Gamma$ its inverse.
+
+However, the tensor products on $s\mathcal{A}$ and on $\Ch_{\ge 0}(\mathcal{A})$
+are \emph{not} transported to each other under this equivalence:
+the normalization functor $N$ does not preserve the monoidal structure.
+This subtle but important fact leads to the appearance of the \emph{shuffle product} on normalized complexes.
+
+\begin{remark}[Two monoidal structures]
+If we transport the tensor product of simplicial objects along the Dold–Kan equivalence,
+we obtain a \emph{different} monoidal structure on $\Ch_{\ge 0}(\mathcal{A})$,
+called the \emph{shuffle product} (or \emph{Eilenberg–Zilber tensor product}).
+It is naturally isomorphic to the ordinary tensor product only up to homotopy,
+and is generally larger (more terms appear in each degree).
+\end{remark}
+
+This phenomenon is controlled by the classical \emph{Eilenberg–Zilber theorem},
+which compares the diagonal and total complexes of bisimplicial objects.
+
+% ---------------------------------------------------
+\begin{definition}[Bisimplicial object]\label{def:bisimplicial-object}
+A \emph{bisimplicial object} in a category $\mathcal{C}$ is a functor
+\[
+A: (\Delta\times \Delta)^{\mathrm{op}} \longrightarrow \mathcal{C},
+\]
+that is, a simplicial object in the category of simplicial objects of $\mathcal{C}$:
+\[
+A \in s(s\mathcal{C}) = \Fun(\Delta^{\mathrm{op}}, \Fun(\Delta^{\mathrm{op}}, \mathcal{C})).
+\]
+Equivalently, it is a doubly indexed collection $\{A_{p,q}\}_{p,q\ge 0}$ of objects in $\mathcal{C}$
+equipped with \emph{horizontal} and \emph{vertical} face and degeneracy maps
+\[
+h\partial_i: A_{p,q}\to A_{p-1,q}, \quad h\sigma_i:A_{p,q}\to A_{p+1,q},
+\qquad
+v\partial_i:A_{p,q}\to A_{p,q-1}, \quad v\sigma_i:A_{p,q}\to A_{p,q+1},
+\]
+satisfying the simplicial identities in each direction,
+and such that all horizontal maps commute with all vertical ones.
+\end{definition}
+
+\begin{example}[Double complex from a bisimplicial object]\label{ex:double-complex}
+If $\mathcal{A}$ is an abelian category, any bisimplicial object $A_{\bullet,\bullet}$ gives rise to
+a first-quadrant double complex
+\[
+A_{p,q}\in \mathcal{A}, \qquad p,q\ge 0,
+\]
+with horizontal differential
+\[
+d_h = \sum_{i=0}^{p} (-1)^i\, h\partial_i: A_{p,q} \longrightarrow A_{p-1,q}
+\]
+and vertical differential
+\[
+d_v = \sum_{i=0}^{q} (-1)^{p+i}\, v\partial_i: A_{p,q} \longrightarrow A_{p,q-1}.
+\]
+These signs ensure that $d_h^2=d_v^2=0$ and $d_hd_v+d_vd_h=0$,
+so that the total differential $d = d_h + d_v$ on the total complex
+$\mathrm{Tot}(A)_{n} = \bigoplus_{p+q=n} A_{p,q}$ satisfies $d^2=0$.
+\end{example}
+
+\begin{definition}[Diagonal functor]\label{def:diag-functor}
+The \emph{diagonal functor}
+\[
+\diag: ss\mathcal{A} \longrightarrow s\mathcal{A}
+\]
+is defined by precomposition with the diagonal embedding
+$\Delta \to \Delta\times\Delta$.
+Explicitly,
+\[
+(\diag A)_n := A_{n,n}, \qquad
+\partial_i = h\partial_i \circ v\partial_i, \quad
+\sigma_i = h\sigma_i \circ v\sigma_i.
+\]
+Thus $\diag(A)$ is the simplicial object obtained by restricting $A$ along the diagonal direction.
+\end{definition}
+
+\begin{remark}[Comparison: diagonal vs.\ total complex]
+For a bisimplicial abelian group $A_{\bullet,\bullet}$, there are two canonical simplicial (or chain) objects associated to it:
+\begin{enumerate}
+  \item The \emph{diagonal} simplicial object $\diag(A)$;
+  \item The \emph{total complex} $\Tot(A)$ obtained from the double complex in Example~\ref{ex:double-complex}.
+\end{enumerate}
+They are not isomorphic but are related by a natural chain homotopy equivalence
+provided by the Eilenberg–Zilber theorem.
+\end{remark}
+
+% ---------------------------------------------------
+\begin{theorem}[Eilenberg–Zilber]\label{thm:eilenberg-zilber}
+Let $\mathcal{A}$ be an abelian category and $A_{\bullet,\bullet}$ a bisimplicial object in $\mathcal{A}$.
+Then the normalization of the diagonal and the total complex are canonically chain-homotopy equivalent:
+\[
+N(\diag A) \ \simeq\  \Tot(N_h N_v A),
+\]
+where $N_h$ and $N_v$ denote the horizontal and vertical normalizations, respectively.
+Explicitly, there exist natural chain maps
+\[
+\mathrm{AW}: N(\diag A) \longrightarrow \Tot(N_hN_v A),
+\qquad
+\mathrm{Sh}: \Tot(N_hN_v A) \longrightarrow N(\diag A)
+\]
+(the \emph{Alexander–Whitney} and \emph{shuffle} maps)
+such that both composites $\mathrm{AW}\circ\mathrm{Sh}$ and $\mathrm{Sh}\circ\mathrm{AW}$
+are homotopic to the identity.
+\end{theorem}
+
+\begin{proof}[Sketch of proof]
+The Alexander–Whitney map splits a simplex into its ``front'' and ``back'' faces,
+whereas the shuffle map combines faces of two simplices in all possible interleavings
+respecting order. Both are constructed explicitly at the level of chains
+and are natural transformations between the two constructions.
+Eilenberg and Mac~Lane proved that these transformations induce chain homotopy equivalences,
+see~\cite[Chap.~VIII]{Weibel} or~\cite[Thm.~1.6.4]{GoerssJardine}.
+\end{proof}
+
+\begin{remark}[Consequences for simplicial rings and cdga’s]
+By applying the normalization functor $N$ to a simplicial commutative ring $A_\bullet$,
+we obtain a nonnegatively graded commutative differential graded algebra:
+\[
+N(A_\bullet) \in \mathrm{cdga}_{\ge 0}(R).
+\]
+The product on $N(A_\bullet)$ is induced via the shuffle map of the Eilenberg–Zilber theorem.
+This correspondence underlies the passage from simplicial rings to cdga’s,
+which becomes an equivalence of homotopy categories after suitable localization
+(e.g.\ Quillen’s equivalence between simplicial commutative rings and connective cdga’s).
+\end{remark}
+
+\begin{theorem}[Eilenberg--Zilber]\label{thm:EZ}
+Let $\mathcal{A}$ be an abelian category and let $A_{\bullet,\bullet}$ be a bisimplicial object in $\mathcal{A}$.
+Then there is a natural isomorphism
+\[
+\pi_\ast\bigl(\diag A_{\bullet,\bullet}\bigr)\ \cong\ H_\ast\bigl(\Tot(N_hN_v A_{\bullet,\bullet})\bigr),
+\]
+where $\diag(A)_n:=A_{n,n}$ is the diagonal simplicial object, $N_h,N_v$ are horizontal/vertical normalizations,
+and $\Tot$ is the total complex of the resulting first–quadrant double complex.
+Equivalently, there is a natural chain homotopy equivalence
+\[
+N\bigl(\diag A\bigr)\ \simeq\ \Tot\bigl(N_hN_v A\bigr),
+\]
+so that $\pi_\ast(\diag A)=H_\ast\bigl(N(\diag A)\bigr)\cong H_\ast\bigl(\Tot(N_hN_v A)\bigr)$.
+\end{theorem}
+
+\begin{proof}[Proof (explicit maps and homotopies)]
+We recall the classical Alexander--Whitney and shuffle maps.
+
+\paragraph{Alexander--Whitney map.}
+Define $\mathrm{AW}_n: A_{n,n}\to \bigoplus_{p+q=n} A_{p,q}$ by
+\[
+\mathrm{AW}_n(a)\ :=\ \sum_{p+q=n}\ \bigl(h\partial_{p+1}\cdots h\partial_{n}\bigr)\ \bigl(v\partial_{0}\bigr)^{q}(a),
+\qquad a\in A_{n,n}.
+\]
+Here $(v\partial_0)^q$ means $q$ successive applications of $v\partial_0$, and $h\partial_{p+1}\cdots h\partial_n$
+are the horizontal faces applied from right to left (so the empty product is the identity when $p=n$ or $q=0$).
+Passing to normalizations gives a well-defined degree–preserving map
+\[
+\mathrm{AW}: N(\diag A)\ \longrightarrow\ \Tot\bigl(N_hN_vA\bigr).
+\]
+
+\paragraph{Shuffle map.}
+For each $p,q\ge 0$ with $p+q=n$, let $\mathrm{Sh}(p,q)$ be the set of $(p,q)$–shuffles,
+i.e.\ pairs of strictly increasing functions $\mu:\{1,\dots,p\}\hookrightarrow \{1,\dots,n\}$,
+$\nu:\{1,\dots,q\}\hookrightarrow \{1,\dots,n\}$ with disjoint images whose union is $\{1,\dots,n\}$.
+Write $\sgn(\mu,\nu)$ for the parity of the permutation that interleaves the $\mu$– and $\nu$–slots.
+Define $\mathrm{Sh}_{p,q}:A_{p,q}\to A_{n,n}$ by
+\[
+\mathrm{Sh}_{p,q}(x)\ :=\ \sum_{(\mu,\nu)\in \mathrm{Sh}(p,q)} (-1)^{\sgn(\mu,\nu)}
+\ \Bigl(h\sigma_{\nu_q}\cdots h\sigma_{\nu_1}\Bigr)\ \Bigl(v\sigma_{\mu_p}\cdots v\sigma_{\mu_1}\Bigr)(x),
+\]
+where $h\sigma_i$ (resp.\ $v\sigma_i$) are horizontal (resp.\ vertical) degeneracies.
+Summing over $p+q=n$ and passing to normalizations yields a degree–preserving map
+\[
+\mathrm{Sh}: \Tot\bigl(N_hN_vA\bigr)\ \longrightarrow\ N(\diag A).
+\]
+
+\paragraph{Chain map property.}
+A standard (but careful) sign computation shows that both $\mathrm{AW}$ and $\mathrm{Sh}$
+commute with the differentials:
+\[
+d\,\mathrm{AW}=\mathrm{AW}\,d,\qquad d\,\mathrm{Sh}=\mathrm{Sh}\,d.
+\]
+The key ingredients are: (i) simplicial identities, (ii) the definitions of $d_h$ and $d_v$
+(with the $(-1)^{p+i}$ sign in $d_v$), and (iii) book-keeping of front/back faces vs.\ interleavings.
+
+\paragraph{Homotopy inverses.}
+There exist explicit natural chain homotopies $H_1, H_2$ (constructed by Eilenberg--Mac~Lane)
+such that
+\[
+\mathrm{AW}\circ \mathrm{Sh}\ \simeq\ \Id_{\Tot(N_hN_vA)},
+\qquad
+\mathrm{Sh}\circ \mathrm{AW}\ \simeq\ \Id_{N(\diag A)}.
+\]
+Therefore $N(\diag A)$ and $\Tot(N_hN_v A)$ are naturally chain homotopy equivalent.
+Taking homology gives the displayed isomorphism, and using Dold--Kan, $\pi_\ast(\diag A)=H_\ast(N(\diag A))$.
+\end{proof}
+
+\begin{corollary}[K\"unneth-type comparison for simplicial tensor]\label{cor:Kun-simplicial}
+Let $R$ be a commutative ring and let $A_\bullet,B_\bullet$ be simplicial $R$–modules.
+Consider the bisimplicial object $C_{m,n}:=A_m\otimes_R B_n$.
+Then
+\[
+\pi_\ast\bigl(\diag(A_\bullet\otimes_R B_\bullet)\bigr)\ \cong\ H_\ast\Bigl(\Tot\bigl(NA_\bullet\ \widetilde{\otimes}_R\ NB_\bullet\bigr)\Bigr),
+\]
+where $\diag(A_\bullet\otimes_R B_\bullet)$ is the simplicial tensor $n\mapsto A_n\otimes_R B_n$,
+and $\Tot\bigl(NA_\bullet\ \widetilde{\otimes}_R\ NB_\bullet\bigr)$ is canonically isomorphic to
+the usual tensor product of chain complexes $NA_\bullet\otimes_R NB_\bullet$ (totalized with Koszul sign).
+Equivalently,
+\[
+\pi_\ast\bigl(\diag(A_\bullet\otimes_R B_\bullet)\bigr)\ \cong\ H_\ast\bigl(NA_\bullet\otimes_R NB_\bullet\bigr).
+\]
+\end{corollary}
+
+\begin{proof}
+Apply Theorem~\ref{thm:EZ} to $C_{m,n}=A_m\otimes_R B_n$. The double complex from $N_hN_v$ is precisely
+the bicomplex whose totalization is the tensor product of the normalized complexes $NA_\bullet$ and $NB_\bullet$.
+\end{proof}
+
+\begin{remark}[Classical shuffle formula on simplicial tensors]
+In the situation of the corollary, the shuffle map on the diagonal $A_n\otimes_R B_n$
+has the concrete form
+\[
+\mathrm{Sh}_n(a\otimes b)\ =\ \sum_{p+q=n}\ \sum_{(\mu,\nu)\in\mathrm{Sh}(p,q)}
+(-1)^{\sgn(\mu,\nu)}\ \Bigl(\sigma_{\nu_q}\cdots \sigma_{\nu_1}a\Bigr)\ \otimes\
+\Bigl(\sigma_{\mu_p}\cdots \sigma_{\mu_1}b\Bigr),
+\]
+i.e.\ a signed sum over all $(p,q)$–interleavings of degeneracies; this is the standard
+Eilenberg--Mac~Lane shuffle. Dually, the Alexander--Whitney map splits faces into
+front/back parts. These induce mutually inverse isomorphisms on homotopy/homology.
+\end{remark}
+
+\begin{remark}[Why this matters for Dold--Kan]
+Dold--Kan yields $N:s\mathcal{A}\overset{\sim}{\to}\Ch_{\ge 0}(\mathcal{A})$ but \emph{not} monoidally:
+the simplicial tensor and the chain tensor do not match on the nose. The Eilenberg--Zilber
+equivalences above show they agree \emph{up to canonical chain homotopy}, hence induce the same
+(co)homology. This is exactly what is used to pass from simplicial rings to cdga’s via the
+shuffle multiplication on normalized chains.
+\end{remark}
+
+\subsection{Shuffle and Alexander--Whitney maps}\label{subsec:AW-shuffle}
+
+Throughout let $\mathcal{A}$ be an abelian category. For a simplicial object
+$A_\bullet\in s\mathcal{A}$ write faces $d_i:A_n\to A_{n-1}$ and degeneracies $s_i:A_n\to A_{n+1}$,
+$0\le i\le n$.
+
+\begin{definition}[(\emph{$(p,q)$}-shuffles and sign)]\label{def:shuffle-sign}
+For $p,q\ge 0$, a \emph{$(p,q)$-shuffle} is a pair of strictly increasing maps
+\[
+\mu:\{1,\dots,p\}\hookrightarrow \{1,\dots,p+q\},
+\qquad
+\nu:\{1,\dots,q\}\hookrightarrow \{1,\dots,p+q\},
+\]
+with disjoint images whose union is $\{1,\dots,p+q\}$.
+It determines a permutation $\sigma(\mu,\nu)\in \Sigma_{p+q}$ that places the
+$\mu$-slots first and the $\nu$-slots second, and we denote by
+\(
+(-1)^{\sgn(\mu,\nu)}
+\)
+the sign of that permutation.
+\end{definition}
+
+\begin{definition}[Shuffle map]\label{def:shuffle-map}
+Let $A_\bullet,B_\bullet\in s\mathcal{A}$. The (Eilenberg--Mac~Lane) \emph{shuffle map}
+\[
+\nabla:\ N(A_\bullet)\ \otimes\ N(B_\bullet)\ \longrightarrow\ N(A_\bullet\otimes B_\bullet)
+\]
+is defined on homogeneous generators $a\in N_pA_\bullet\subseteq A_p$ and
+$b\in N_qB_\bullet\subseteq B_q$ by
+\[
+\nabla(a\otimes b)
+\;=\;
+\sum_{(\mu,\nu)\in \mathrm{Sh}(p,q)}
+(-1)^{\sgn(\mu,\nu)}\;
+\Bigl(s_{\nu_q}\cdots s_{\nu_1}a\Bigr)\ \otimes\
+\Bigl(s_{\mu_p}\cdots s_{\mu_1}b\Bigr)
+\ \in\ (A\otimes B)_{p+q},
+\]
+and then projected to the normalized subgroup $N_{p+q}(A\otimes B)$.
+\end{definition}
+
+\begin{definition}[Alexander--Whitney map]\label{def:AW-map}
+The \emph{Alexander--Whitney map}
+\[
+\mathrm{AW}:\ N(A_\bullet\otimes B_\bullet)\ \longrightarrow\ N(A_\bullet)\ \otimes\ N(B_\bullet)
+\]
+is the degree-preserving map whose $n$-th component
+$\mathrm{AW}_n:(A\otimes B)_n\to \bigoplus_{p+q=n}A_p\otimes B_q$ is
+\[
+\mathrm{AW}_n(a\otimes b)
+\;=\;
+\sum_{p+q=n}\;
+\Bigl(d_{p+1}\cdots d_n\,a\Bigr)\ \otimes\ \Bigl(d_0\cdots d_{p-1}\,b\Bigr),
+\qquad a\in A_n,\ b\in B_n,
+\]
+followed by the projection to $N_pA\otimes N_qB$ in each summand.
+\end{definition}
+
+\begin{remark}[Front/back faces and degeneracies]
+In the AW formula, $d_{p+1}\cdots d_n$ takes the \emph{front} $p$-face of $a$,
+while $d_0\cdots d_{p-1}$ takes the \emph{back} $q$-face of $b$ (with $q=n-p$).
+In the shuffle formula, $s_{\nu_\bullet}$ and $s_{\mu_\bullet}$ distribute degeneracies
+to interleave degrees $p$ and $q$ into degree $p+q$.
+\end{remark}
+
+\begin{proposition}[Both maps factor through normalization]\label{prop:factor-normalized}
+The formulas in Definitions~\ref{def:shuffle-map} and~\ref{def:AW-map} send degenerate chains
+to degenerate chains; hence they induce well-defined maps on normalized complexes as stated.
+\end{proposition}
+
+\begin{proof}
+For $\nabla$, if $a=s_i(a')$ is degenerate in $A_p$, then each summand contains
+$s_{\nu_q}\cdots s_{\nu_1}s_i(a')$ in the $A$-slot, hence is degenerate in $(A\otimes B)_{p+q}$;
+similarly if $b$ is degenerate. For $\mathrm{AW}$, if $a$ or $b$ is degenerate, at least one
+of $d_{p+1}\cdots d_n a$ or $d_0\cdots d_{p-1} b$ is degenerate (by simplicial identities),
+so the image lies in the degenerate subcomplex. Details are standard and use
+$d_is_j=\begin{cases}s_{j-1}d_i & i<j,\\ \mathrm{id} & i=j\text{ or }i=j+1,\\ s_jd_{i-1} & i>j+1.\end{cases}$
+\end{proof}
+
+\begin{proposition}[Chain map property]\label{prop:chain-maps}
+With the standard simplicial differential $d=\sum_{i=0}^n(-1)^i d_i$, both
+\[
+d\,\nabla=\nabla\, d
+\qquad\text{on }N(A)\otimes N(B),
+\qquad\text{and}\qquad
+d\,\mathrm{AW}=\mathrm{AW}\, d
+\quad\text{on }N(A\otimes B).
+\]
+\end{proposition}
+
+\begin{proof}[Sketch]
+For $\nabla$, compute $d$ of each shuffle summand using $d_is_j$ identities and track the sign
+$(-1)^{\sgn(\mu,\nu)}$; terms cancel in pairs corresponding to interleavings where one face hits a
+degeneracy in two different orders. For $\mathrm{AW}$, expand $d$ on $a\otimes b$ and compare with
+$d$ on each front/back component; the simplicial relations again split contributions into front vs.\ back
+and the signs match the AW summation indices. Standard references carry the full bookkeeping.
+\end{proof}
+
+\begin{theorem}[Eilenberg--Zilber equivalence]\label{thm:EZ-equivalence}
+The maps
+\[
+\nabla:\ N(A)\otimes N(B)\longrightarrow N(A\otimes B),
+\qquad
+\mathrm{AW}:\ N(A\otimes B)\longrightarrow N(A)\otimes N(B),
+\]
+are natural chain maps such that
+\[
+\mathrm{AW}\circ \nabla\ =\ \mathrm{id}_{N(A)\otimes N(B)},
+\qquad
+\nabla\circ \mathrm{AW}\ \simeq\ \mathrm{id}_{N(A\otimes B)}
+\]
+(chain homotopy equivalence). In particular, both are quasi-isomorphisms.
+\end{theorem}
+
+\begin{proof}
+On normalized chains, $\mathrm{AW}\circ\nabla=\Id$:
+apply $\mathrm{AW}$ to a single shuffle summand; only the \emph{identity} shuffle contributes a
+nondegenerate term (others become degenerate and vanish in $N(-)$).
+Hence the composite is exactly $a\otimes b$.
+For the other composite, Eilenberg--Mac~Lane construct an explicit prism homotopy
+$H: N_n(A\otimes B)\to N_{n+1}(A\otimes B)$ satisfying
+$dH+Hd=\Id-\nabla\circ\mathrm{AW}$. The formula inserts one extra degeneracy and sums
+over positions with appropriate signs; verification uses the same identities as above.
+Therefore $\nabla$ and $\mathrm{AW}$ are homotopy inverses.
+\end{proof}
+
+\begin{remark}[Symmetric monoidal behavior]\label{rmk:monoidal}
+The shuffle map endows the normalization functor
+$N:s\mathcal{A}\to \Ch_{\ge 0}(\mathcal{A})$ with the structure of a \emph{symmetric lax monoidal}
+functor:
+\[
+\nabla_{A,B}:\ N(A)\otimes N(B)\longrightarrow N(A\otimes B),
+\qquad
+N(\mathbf{1})\cong \mathbf{1},
+\]
+compatible with associativity, unit, and symmetry isomorphisms
+(the symmetry is the Koszul sign, matching $(-1)^{pq}$ on $N_pA\otimes N_qB$).
+By contrast, $\mathrm{AW}$ is \emph{colax} monoidal but generally not symmetric (it is not compatible with the twist).
+\end{remark}
+
+\begin{remark}[Low-degree sanity check]
+For $p=q=0$, $\nabla(a\otimes b)=a\otimes b$ and $\mathrm{AW}(a\otimes b)=a\otimes b$.
+For $p=1,q=0$,
+$\nabla(a_1\otimes b_0)=s_1 a_1\otimes b_0 + s_0 a_1\otimes b_0$, and
+$\mathrm{AW}(a_1\otimes b_1)=d_1 a_1\otimes b_1 + a_1\otimes d_0 b_1$,
+illustrating ``front/back'' splitting vs.\ interleaving degeneracies.
+\end{remark}
+
+\subsection{From simplicial rings to differential graded algebras}\label{subsec:srings-to-dgas}
+
+We continue with an abelian symmetric monoidal category $(\mathcal{A},\otimes,\mathbf{1})$.
+In particular, take $\mathcal{A}=R\text{-}\mathbf{Mod}$ for a commutative ring $R$.
+
+Recall (Definitions~\ref{def:shuffle-map} and~\ref{def:AW-map}) that the
+\emph{normalization} functor
+\[
+N:\ s\mathcal{A}\longrightarrow \Ch_{\ge 0}(\mathcal{A})
+\]
+is equipped with a \emph{symmetric lax monoidal} structure
+\[
+\nabla_{A,B}:\ N(A)\otimes N(B)\longrightarrow N(A\otimes B),\qquad N(\mathbf{1})\cong \mathbf{1},
+\]
+induced by the \emph{shuffle map}; and the \emph{denormalization} (quasi-inverse) functor
+\[
+K:\ \Ch_{\ge 0}(\mathcal{A}) \longrightarrow s\mathcal{A}
+\]
+is equipped with a \emph{colax monoidal} structure
+\[
+\mathrm{AW}_{A,B}:\ K(A\otimes B)\longrightarrow K(A)\otimes K(B),
+\qquad K(\mathbf{1})\cong \mathbf{1},
+\]
+induced by the \emph{Alexander--Whitney map}. The former is symmetric, the latter is generally \emph{not}.
+
+\begin{proposition}\label{prop:12020}
+\emph{(Cf.\ \S I.3.1.3)} The functors $N$ and $K$ induce the following functors between algebra objects:
+\[
+N:\ s\mathbf{CRing}\ \longrightarrow\ s(\mathbf{cdga}),
+\qquad
+K:\ s(\mathbf{dga})\ \longrightarrow\ s\mathbf{Ring}.
+\]
+Here $s\mathbf{CRing}$ denotes simplicial commutative rings, $\mathbf{dga}$ (resp.\ $\mathbf{cdga}$)
+denotes (commutative) differential graded algebras in $\Ch_{\ge 0}(R\text{-}\mathbf{Mod})$, and
+$s(\mathbf{dga})$ means simplicial objects valued in $\mathbf{dga}$.
+\end{proposition}
+
+\begin{proof}[Proof (functorial mechanism)]
+A lax monoidal functor sends \emph{monoid objects} to monoid objects.
+Since $N$ is \emph{symmetric} lax monoidal via $\nabla$,
+it carries \emph{commutative} monoids in $s(R\text{-}\mathbf{Mod})$ (i.e.\ simplicial commutative rings)
+to \emph{commutative} monoids in $\Ch_{\ge 0}(R\text{-}\mathbf{Mod})$, i.e.\ cdga's,
+and this levelwise for simplicial objects, giving $N:\ s\mathbf{CRing}\to s(\mathbf{cdga})$.
+
+Conversely, $K$ is \emph{colax} monoidal via $\mathrm{AW}$.
+Passing to \emph{noncommutative} monoids, a colax structure on $K$ yields (by adjunction with $N$)
+a natural multiplication on $K$–images of dga's which is associative and unital,
+but $K$ is not \emph{symmetric}, so commutativity does not transport.
+Thus we obtain $K:\ s(\mathbf{dga})\to s\mathbf{Ring}$ but not a functor
+$s(\mathbf{cdga})\to s\mathbf{CRing}$ in general.
+\end{proof}
+
+\begin{remark}[Why cdga’s appear from simplicial commutative rings]\label{rmk:cdga-from-scr}
+The multiplication on $N(A_\bullet)$ for a simplicial commutative ring $A_\bullet$
+is defined by transporting the simplicial tensor along the \emph{shuffle}:
+on normalized chains, it is \emph{graded commutative} with the Koszul sign
+$xy=(-1)^{|x||y|}yx$. Hence $N(A_\bullet)$ is a cdga concentrated in nonnegative degrees.
+\end{remark}
+
+\begin{remark}[No symmetric structure for $K$]\label{rmk:K-not-symmetric}
+The Alexander--Whitney map $\mathrm{AW}_{A,B}$ fails to commute with the symmetry (twist),
+so $K$ does not acquire a \emph{symmetric} lax monoidal structure.
+Consequently, there is no canonical functor $K:\ s(\mathbf{cdga})\to s\mathbf{CRing}$.
+\end{remark}
+
+\begin{proposition}[Odd squares and divided powers]\label{prop:odd-square}
+Let $A_\bullet$ be a simplicial commutative ring. Then the cohomology (homology) algebra
+$H^\ast(N A_\bullet)$ (or $H_\ast(N A_\bullet)$, depending on grading convention)
+is a graded-commutative algebra endowed with natural \emph{divided power} operations.
+In particular, for any homogeneous class $x$ of odd degree,
+\[
+x^2=0.
+\]
+\end{proposition}
+
+\begin{proof}[Explanation]
+Simplicial commutative rings carry \emph{Dyer--Lashof/divided power} operations at the chain level,
+and the shuffle product on $N(A_\bullet)$ interacts with degeneracies to produce a \emph{divided power structure}
+$\{\gamma_k\}$ on homology. In a divided power algebra, one has $\gamma_2(x)=\frac{x^2}{2}$ and $\gamma_2(x)=0$ for $|x|$ odd,
+which forces $x^2=0$ integrally. For a general graded-commutative dga (with no divided powers) one only has
+$2x^2=0$ when $|x|$ is odd, coming from the Koszul sign $x^2=(-1)^{|x|^2}x^2=-x^2$.
+\end{proof}
+
+\begin{corollary}[Rectification obstruction in positive/unspecified characteristic]\label{cor:rectification}
+Without a characteristic zero hypothesis, not every cdga is quasi-isomorphic to $N(A_\bullet)$ for some simplicial commutative ring $A_\bullet$:
+the ``odd squares vanish'' constraint above holds for $H^\ast(NA_\bullet)$ but not for a general cdga (where only $2x^2=0$ can be guaranteed).
+More generally, $H^\ast(NA_\bullet)$ has divided powers that need not exist on the homology of an arbitrary cdga.
+\end{corollary}
+
+\begin{remark}[Model structures and the need for $E_\infty$]\label{rmk:model-structures}
+The forgetful functor $\mathbf{dga}\to \Ch_{\ge 0}(R\text{-}\mathbf{Mod})$ does not (in general) \emph{create} a model structure:
+there is no naive way to transfer the model structure from complexes to dga’s that is homotopically well-behaved and preserves commutativity.
+In arbitrary characteristic, the homotopically meaningful replacement for commutative algebra objects is the category of \emph{$E_\infty$–algebras}
+(commutative up to all coherent higher homotopies). In characteristic zero, rectification often allows an equivalence
+$E_\infty\text{-}\mathbf{Alg}\simeq \mathbf{cdga}$, but this fails in general in positive characteristic.
+\end{remark}
+\subsection{From simplicial cdga's to a single cdga}\label{subsec:simplicial-cdga-to-cdga}
+
+\begin{lemma}[Illusie’s shuffle totalization]\label{lem:tot-cdga}
+There is a functor
+\[
+\Tot_{\shuffle}:\ \Fun(\Delta^{\op},\mathbf{cdga}_A)\ \longrightarrow\ \mathbf{cdga}_A,
+\]
+sending a simplicial differential graded $A$–algebra to a (nonnegatively) graded
+commutative differential graded $A$–algebra.
+\end{lemma}
+
+\begin{proof}
+Let $(B^\ast_\bullet,d,\wedge)$ be a simplicial cdga over a commutative ring $A$.
+Write $B^p_i$ for the component in simplicial degree $p\ge 0$ and cochain degree $i\ge 0$.
+Face/degeneracy maps in the simplicial direction are cdga morphisms and commute with $d$.
+
+\smallskip
+\textbf{(1) Bicomplex and total complex.}
+Form the first-quadrant bicomplex with horizontal (simplicial) and vertical (cochain) directions
+\[
+\begin{tikzcd}[ampersand replacement=\&]
+\ddots \& \vdots \& \vdots \\
+\cdots \arrow[r] \& B^{p}_{i+1} \arrow[r,"\,\partial\,"] \arrow[u,"d"] \& B^{p-1}_{i+1} \arrow[u,"d"] \\
+\cdots \arrow[r] \& B^{p}_{i} \arrow[r,"\,\partial\,"] \arrow[u,"d"] \& B^{p-1}_{i} \arrow[u,"d"] \\
+\cdots \arrow[r] \& B^{p}_{i-1} \arrow[r,"\,\partial\,"] \arrow[u,"d"] \& B^{p-1}_{i-1} \arrow[u,"d"]
+\end{tikzcd}
+\]
+where $\partial=\sum_{r=0}^{p}(-1)^r d_r$ is the alternating simplicial face differential
+($d_r$ the $r$-th face), and $d:B^p_i\to B^p_{i+1}$ is the internal cochain differential.
+
+Define the \emph{total} cochain complex $\Tot_\oplus(B)$ by
+\[
+\Tot_\oplus^n(B)\ :=\ \bigoplus_{\,p-i=n} B^p_i,\qquad
+D\,\big|_{B^p_i}\ :=\ \partial\ +\ (-1)^{p}\,d.
+\]
+\emph{Claim:} $D^2=0$. Indeed, $\partial^2=0$, $d^2=0$, and $d$ commutes with each face $d_r$
+(because faces are cdga morphisms), so $\partial d=d\,\partial$. Hence
+\[
+D^2=\partial^2 + (-1)^p(\partial d + d\partial) + (-1)^{2p} d^2=0.
+\]
+
+\smallskip
+\textbf{(2) Shuffle product on $\Tot_\oplus(B)$.}
+For homogeneous $\omega\in B^p_i$ and $\eta\in B^q_j$, define
+\[
+\omega\ \shuffle\ \eta
+\;:=\;
+(-1)^{p\,j}\!\!\sum_{(\mu,\nu)\in\Sh(p,q)}\!\!
+(-1)^{\sgn(\mu,\nu)}\;
+\bigl(s_{\nu_q}\cdots s_{\nu_1}\,\omega\bigr)\ \wedge\ \bigl(s_{\mu_p}\cdots s_{\mu_1}\,\eta\bigr)
+\ \in\ B^{p+q}_{\,i+j},
+\tag{$\ast$}\label{eq:shuffle-product}
+\]
+where $\Sh(p,q)$ is the set of $(p,q)$–shuffles, $\sgn(\mu,\nu)$ the parity of the interleaving permutation,
+and $s_k$ are degeneracies in the simplicial direction. The factor $(-1)^{p\,j}$ is the
+\emph{Illusie sign} (cf.\ Remark~\ref{rmk:Illusie-sign}).
+
+Extend bilinearly to $\Tot_\oplus^\ast(B)\otimes \Tot_\oplus^\ast(B)\to \Tot_\oplus^\ast(B)$.
+Let $1\in B^0_0$ be the multiplicative unit (constant simplices); it serves as unit for $\shuffle$.
+
+\smallskip
+\textbf{(3) Associativity.}
+Associativity of $\shuffle$ follows from: (i) associativity of the shuffle map in the simplicial
+direction (Eilenberg--Zilber), (ii) associativity of $\wedge$ in each level, and
+(iii) functoriality of degeneracies. Precisely,
+\[
+(\omega\shuffle\eta)\shuffle\zeta
+\ =\
+\omega\shuffle(\eta\shuffle\zeta),
+\]
+with the same total sign obtained by counting the Koszul/permution signs in both parenthesizations.
+
+\smallskip
+\textbf{(4) Graded commutativity.}
+Let $|\omega|=p-i$ and $|\eta|=q-j$ be the \emph{total} degrees. Then
+\[
+\eta\shuffle\omega
+\;=\;
+(-1)^{|\omega|\,|\eta|}\,\omega\shuffle\eta.
+\]
+Indeed, swapping the roles of $(p,i)$ and $(q,j)$ flips the shuffle by
+$(-1)^{pq}$ (parity of $(p,q)$–interleavings), the internal cdga commutativity contributes
+$(-1)^{ij}$, and the Illusie sign contributes $(-1)^{q i}$ vs.\ $(-1)^{p j}$.
+Altogether one gets $(-1)^{pq+ij+qi+pj}=(-1)^{(p-i)(q-j)}$.
+
+\smallskip
+\textbf{(5) Leibniz rule for $D$.}
+We show
+\[
+D(\omega\shuffle\eta)
+\;=\;
+D\omega\shuffle\eta\ +\ (-1)^{|\omega|}\,\omega\shuffle D\eta.
+\]
+Split $D=\partial+(-1)^p d$ on $B^p_i$ and $D=\partial+(-1)^q d$ on $B^q_j$.
+The $\partial$–part uses that the shuffle map is a chain map with respect to the simplicial differential
+(Eilenberg--Zilber: $d\,\nabla=\nabla\,d$), together with the bookkeeping of the Illusie sign
+$(-1)^{p j}$ in~\eqref{eq:shuffle-product}.
+The $d$–part uses that each face/degeneracy is a cdga morphism (so commutes with $d$), and that
+$d$ is a derivation for $\wedge$:
+\[
+d\bigl((s_\nu\omega)\wedge (s_\mu\eta)\bigr)
+=(ds_\nu\omega)\wedge(s_\mu\eta)+(-1)^i (s_\nu\omega)\wedge(ds_\mu\eta).
+\]
+Combining the signs (including $(-1)^p$ and $(-1)^q$ from $D$) yields exactly $(-1)^{|\omega|}$ in the second term.
+
+\smallskip
+\textbf{(6) Unit.}
+The element $1\in B^0_0\subset \Tot_\oplus^0(B)$ satisfies $1\shuffle x=x=x\shuffle 1$:
+only the identity shuffle contributes, degeneracies of $1$ are again $1$, and the Illusie sign is $1$.
+
+\smallskip
+\textbf{(7) Functoriality.}
+A morphism $f_\bullet^\ast:B_\bullet^\ast\to C_\bullet^\ast$ in $\Fun(\Delta^{\op},\mathbf{cdga}_A)$
+is levelwise a cdga map commuting with faces/degeneracies. Apply $f$ to each summand
+in~\eqref{eq:shuffle-product} to see $f$ preserves $\shuffle$ and $D$, hence induces a cdga map
+$\Tot_{\shuffle}(B)\to \Tot_{\shuffle}(C)$. Thus $\Tot_{\shuffle}$ is functorial.
+
+\smallskip
+Therefore $\bigl(\Tot_\oplus^\ast(B),D,\shuffle,1\bigr)$ is a commutative dga over $A$,
+natural in $B$. Set $\Tot_{\shuffle}(B):=\bigl(\Tot_\oplus^\ast(B),D,\shuffle,1\bigr)$.
+\end{proof}
+
+\begin{remark}[On the Illusie sign]\label{rmk:Illusie-sign}
+The leading factor $(-1)^{p\,j}$ in~\eqref{eq:shuffle-product} is essential to make the Leibniz rule
+and graded commutativity hold with the total degree $|\,\cdot\,|=p-i$.
+(We thank T.~Szamuely and G.~Z\'abr\'adi for highlighting this choice.)
+It aligns the simplicial (homological) and internal (cohomological) gradings in the totalization.
+\end{remark}
+
+\begin{proof}[Detailed proof of the Leibniz rule and functoriality]
+Fix a simplicial cdga $(B^\ast_\bullet,d,\wedge)$ over $A$.
+Recall the total complex
+\[
+\Tot^n(B)\;=\;\bigoplus_{p-i=n} B^p_i,
+\qquad
+D\big|_{B^p_i}=\partial+(-1)^p d,
+\]
+and the product (Illusie shuffle)
+\begin{equation}\label{eq:Illusie-prod}
+\omega\cdot\eta
+\;=\;(-1)^{pj}\!\!\sum_{(\mu,\nu)\in \Sh(p,q)}\!\!
+(-1)^{\sgn(\mu,\nu)}\ \sigma_\nu(\omega)\ \wedge_{i+j}\ \sigma_\mu(\eta),
+\qquad
+\omega\in B^p_i,\ \eta\in B^q_j,
+\end{equation}
+where $\sigma_\nu=s_{\nu_q}\cdots s_{\nu_1}$ and $\sigma_\mu=s_{\mu_p}\cdots s_{\mu_1}$ are the
+simplicial degeneracies and $\wedge_{i+j}$ is the multiplication in cochain degree $i+j$.
+We must show:
+\[
+D(\omega\cdot\eta)\;=\;D\omega\cdot\eta\;+\;(-1)^{p-i}\ \omega\cdot D\eta.
+\]
+
+\medskip
+
+\noindent\textbf{1) Reduction to a $2\times 2$ square.}
+Write $|\omega|=p-i$ and $|\eta|=q-j$. Since $D=\partial+(-1)^p d$ on $B^p_i$ and
+$D=\partial+(-1)^q d$ on $B^q_j$, it suffices to prove the commutativity of the square
+\[
+\begin{tikzcd}[row sep=large, column sep=large]
+B^p_i\otimes_A B^q_j \ar[r,"{\ \cdot\ }"] \ar[d,"{\partial_i+(-1)^p d^p_i\ +\ (-1)^{p-i}\bigl(-\partial_j+(-1)^q d^q_j\bigr)}"']
+&
+B^{p+q}_{i+j} \ar[d,"{\ \partial_{i+j}\ +\ (-1)^{i+j} d_{i+j}^{p+q}\ }"]
+\\
+B^{p-1}_i\otimes B^q_j \ \oplus\ B^p_{i+1}\otimes B^q_j \ \oplus\ B^p_i\otimes B^{q-1}_j \ \oplus\ B^p_i\otimes B^q_{j+1}
+\ar[r,"{\ \cdot\ }"']
+&
+B^{p+q-1}_{i+j} \ \oplus\ B^{p+q}_{i+j+1}
+\end{tikzcd}
+\]
+(the decomposition simply records where each summand of $D$ lands). On homogeneous
+$\omega\in B^p_i$, $\eta\in B^q_j$, this commutativity is equivalent to the pair of identities
+\begin{align}
+(-1)^{pj}\!\!\sum_{(\mu,\nu)}\!\! \sgn(\mu,\nu)\,
+\partial_{i+j}\bigl(\sigma_\nu\omega \ \wedge_{i+j}\ \sigma_\mu\eta\bigr)
+&=
+(-1)^{pj}\!\!\sum_{(\mu',\nu')}\!\!\sgn(\mu',\nu')\,
+\sigma_{\nu'}(\partial_i\omega) \ \wedge_{i+j-1}\ \sigma_{\mu'}\eta
+\label{eq:front-face}\\[-1pt]
+&\quad
++(-1)^{pj}(-1)^{p-i}\!\!\sum_{(\mu'',\nu'')}\!\!\sgn(\mu'',\nu'')\,
+\sigma_{\nu''}\omega \ \wedge_{i+j-1}\ \sigma_{\mu''}(\partial_j\eta),
+\tag{1.4--1.5}
+\\[4pt]
+(-1)^{pj}(-1)^{i+j}\!\!\sum_{(\mu,\nu)}\!\!\sgn(\mu,\nu)\,
+d^{p+q}_{i+j}\bigl(\sigma_\nu\omega \ \wedge_{i+j}\ \sigma_\mu\eta\bigr)
+&=
+(-1)^{p+1}(-1)^{pj}\!\!\sum_{(\mu,\nu)}\!\!\sgn(\mu,\nu)\,
+\sigma_\nu(d^p_i\omega)\ \wedge_{i+j}\ \sigma_\mu\eta
+\notag\\[-2pt]
+&\qquad
++(-1)^{pj}(-1)^{p-i}\!\!\sum_{(\mu,\nu)}\!\!\sgn(\mu,\nu)\,
+\sigma_\nu\omega\ \wedge_{i+j}\ \sigma_\mu(d^q_j\eta).
+\label{eq:internal-d}
+\tag{1.6}
+\end{align}
+Here we wrote only those summands that survive in the indicated bidegrees; all other face terms cancel
+pairwise by shuffle combinatorics.
+
+\medskip
+
+\noindent\textbf{2) The three elementary commutative squares.}
+The equalities \eqref{eq:front-face}–\eqref{eq:internal-d} follow from the commutativity of the
+following three natural squares in $A$–modules (all morphisms preserve multiplication and $d$):
+
+\begin{equation}\label{sq:face-left}
+\begin{tikzcd}[column sep=large]
+B^{p-1}_i\otimes_A B^q_j \ar[r,"{\ \shuffle\ }"] \ar[d,"{\ \partial_i\ \otimes\ \Id\ }"']
+&
+B^{p+q-1}_{i+j-1}\otimes_A B^0_0 \ar[r,"{\ \wedge_{i+j-1}\ }"]
+&
+B^{p+q-1}_{\,i+j-1} \ar[d,"{\ \partial_{i+j-1}\ }"]
+\\
+B^p_i\otimes_A B^q_j \ar[rr,"{\ \shuffle\ }"']
+&&
+B^{p+q}_{\,i+j-1}
+\end{tikzcd}
+\end{equation}
+
+\begin{equation}\label{sq:face-right}
+\begin{tikzcd}[column sep=large]
+B^{p}_i\otimes_A B^{q-1}_j \ar[r,"{\ \shuffle\ }"] \ar[d,"{\ \Id\ \otimes\ \partial_j\ }"']
+&
+B^{p+q-1}_{i+j-1}\otimes_A B^0_0 \ar[r,"{\ \wedge_{i+j-1}\ }"]
+&
+B^{p+q-1}_{\,i+j-1} \ar[d,"{\ \partial_{i+j-1}\ }"]
+\\
+B^p_i\otimes_A B^q_j \ar[rr,"{\ \shuffle\ }"']
+&&
+B^{p+q}_{\,i+j-1}
+\end{tikzcd}
+\end{equation}
+
+\begin{equation}\label{sq:internal-d}
+\begin{tikzcd}[column sep=large]
+B^{p}_i\otimes_A B^q_j \ar[r,"{\ \shuffle\ }"] \ar[d,"{\ d^p_i\ \otimes\ \Id\ \oplus\ (-1)^i\,\Id\ \otimes\ d^q_j\ }"']
+&
+B^{p+q}_{i+j} \ar[d,"{\ d^{p+q}_{i+j}\ }"]
+\\
+B^{p}_{i+1}\otimes_A B^q_j \ \oplus\ B^{p}_i\otimes_A B^q_{j+1}
+\ar[r,"{\ \shuffle\ }"']
+&
+B^{p+q}_{i+j+1}
+\end{tikzcd}
+\end{equation}
+
+\noindent
+Explanations:
+\begin{itemize}
+\item The \emph{shuffle} is a chain map for the simplicial differential (Eilenberg–Zilber),
+so it respects faces; this gives the left/right face squares \eqref{sq:face-left}–\eqref{sq:face-right}.
+\item Each face/degeneracy is a cdga morphism; in particular it commutes with $d$
+and preserves $\wedge$. This and the derivation property of $d$ yield \eqref{sq:internal-d},
+including the Koszul sign $(-1)^i$ on the \(\Id\otimes d\) branch.
+\item The global sign $(-1)^{pj}$ in \eqref{eq:Illusie-prod} exactly corrects the parity
+when we interchange the simplicial degree \(p\) and the internal degree \(j\),
+so that the total degree \(|\omega|=p-i\) governs the Leibniz sign \( (-1)^{|\omega|}\).
+\end{itemize}
+Chasing \eqref{sq:face-left}–\eqref{sq:internal-d} gives \eqref{eq:front-face}–\eqref{eq:internal-d},
+hence $D(\omega\cdot\eta)=D\omega\cdot\eta+(-1)^{|\omega|}\omega\cdot D\eta$.
+
+\medskip
+
+\noindent\textbf{3) Consequences.}
+We have shown that $(\Tot^\ast(B),D,\cdot)$ is a dga. Associativity and graded
+commutativity (with respect to total degree) follow from the associativity of $\wedge$
+and the standard combinatorics of shuffles; the unit is $1\in B^0_0$.
+
+\medskip
+
+\noindent\textbf{4) Functoriality.}
+Let $f: B^\ast_\bullet\to C^\ast_\bullet$ be a morphism in $\Fun(\Delta^{\op},\mathbf{cdga}_A)$.
+For each $p$ we get a commutative cube of $A$–modules
+\[
+\begin{tikzcd}[row sep=small, column sep=small]
+B^p_{i+1} \ar[rr,"{f^p_{i+1}}"] \ar[dd,"{d^p_{i}}"'] \ar[dr,"{\partial_i}"] && C^p_{i+1} \ar[dd,"{d^p_{i}}"] \ar[dr,"{\partial_i}"] & \\
+& B^{p+1}_{i} \ar[rr, crossing over, "{f^{p+1}_{i}}"] \ar[dd,"{d^{p+1}_{i-1}}"'] && C^{p+1}_{i} \ar[dd,"{d^{p+1}_{i-1}}"] \\
+B^p_{i} \ar[rr,"{f^p_{i}}"'] \ar[dr,"{\partial_{i-1}}"'] && C^p_{i} \ar[dr,"{\partial_{i-1}}"] & \\
+& B^{p+1}_{i-1} \ar[rr,"{f^{p+1}_{i-1}}"'] && C^{p+1}_{i-1}
+\end{tikzcd}
+\]
+(the faces say that $f$ commutes with faces and differentials and is multiplicative levelwise).
+Define
+\[
+\int f\ :=\ \bigoplus_{p-i=n} f^p_i\ :\ \Tot^n(B)\longrightarrow \Tot^n(C).
+\]
+Then $\int f$ is a cochain map (since each square commutes) and
+\[
+(\int f)(\omega\cdot\eta)
+= (-1)^{pj}\!\!\sum_{(\mu,\nu)}\!\!\sgn(\mu,\nu)\
+f^{p+q}_{i+j}\!\bigl(\sigma_\nu\omega\ \wedge_{i+j}\ \sigma_\mu\eta\bigr)
+= (-1)^{pj}\!\!\sum_{(\mu,\nu)}\!\!\sgn(\mu,\nu)\
+\sigma_\nu f^p_i(\omega)\ \wedge_{i+j}\ \sigma_\mu f^q_j(\eta)
+\]
+(using that $f$ is a functor $\Delta^{\op}\!\to\mathbf{cdga}_A$, so it commutes with degeneracies
+and preserves products). Hence
+\[
+(\int f)(\omega\cdot\eta) \;=\; (\int f)(\omega)\ \cdot\ (\int f)(\eta),
+\]
+i.e. $\int f:\Tot(B)\to\Tot(C)$ is a graded algebra map; together with the cochain check,
+$\int f$ is a \emph{cdga} morphism. This proves functoriality.
+\end{proof}
+
+\subsection{Truncations of differential graded algebras}\label{subsec:truncations-cdga}
+
+Let $(C^\ast,d,\cdot)$ be a commutative differential graded $A$–algebra (cdga),
+cohomological grading (so $d:C^n\to C^{n+1}$).
+
+\begin{definition}[Na\"\i ve (canonical) truncations of complexes]\label{def:canonical-trunc}
+For any cochain complex $C^\ast$ and integer $n\in\mathbb{Z}$, set
+\[
+\bigl(t_{[n}C^\ast\bigr)^k :=
+\begin{cases}
+0 & k<n,\\
+C^n/d(C^{n-1}) & k=n,\\
+C^k & k>n,
+\end{cases}
+\qquad
+\bigl(t_{n]}C^\ast\bigr)^k :=
+\begin{cases}
+C^k & k<n,\\
+\ker(d:C^n\to C^{n+1}) & k=n,\\
+0 & k>n,
+\end{cases}
+\]
+with the evident differentials. There are canonical morphisms
+\[
+\pi:\ C^\ast \longrightarrow t_{[n}C^\ast,
+\qquad
+\iota:\ t_{n]}C^\ast \longrightarrow C^\ast.
+\]
+\end{definition}
+
+\begin{remark}[Naturality on cohomology]\label{rmk:trunc-cohom-iso}
+The maps in Definition~\ref{def:canonical-trunc} induce isomorphisms
+\[
+H^k(C^\ast)\xrightarrow{\ \cong\ } H^k\bigl(t_{[n}C^\ast\bigr)\quad (k>n),
+\qquad
+H^k\bigl(t_{n]}C^\ast\bigr)\xrightarrow{\ \cong\ } H^k(C^\ast)\quad (k<n).
+\]
+Hence, if $H^k(C^\ast)=0$ for $k<n$ (resp.\ $k>n$), then
+$C^\ast\to t_{[n}C^\ast$ (resp.\ $t_{n]}C^\ast\to C^\ast$) is a quasi-isomorphism.
+\end{remark}
+
+The preceding constructions are \emph{complex-theoretic}. We now ask: do they
+inherit a \emph{cdga} structure, and do the canonical maps preserve multiplication?
+
+\paragraph{Failure of multiplicativity for the na\"\i ve truncations.}
+
+\begin{proposition}[Na\"\i ve truncations are not cdga's in general]\label{prop:naive-fails}
+In general, $t_{[n}C^\ast$ and $t_{n]}C^\ast$ do not admit a cdga structure
+for which the canonical maps are cdga morphisms, unless the multiplication is
+trivial for degree reasons (e.g.\ $C^\ast$ concentrated in degree $0$).
+\end{proposition}
+
+\begin{proof}
+\emph{Case \(\boldsymbol{t_{[n}}\).}
+In degree $n$ one works in the quotient $C^n/B^n$ with $B^n:=d(C^{n-1})$.
+Take a class $[a]\in C^n/B^n$ and $b\in C^m$ ($m>0$).
+If we replace $a$ by $a+d(\alpha)$, then
+\[
+(a+d\alpha)\cdot b \;=\; a\cdot b \;+\; d(\alpha)\cdot b
+\;=\; a\cdot b \;+\; d(\alpha b)\ -\ (-1)^{|\alpha|}\,\alpha\cdot d(b).
+\]
+In degree $n+m$ of $t_{[n}C^\ast$ there is \emph{no quotient}, so for well-definedness we
+would need $d(\alpha)\cdot b$ to be a boundary \emph{for all} $b$; but the extra term
+$(-1)^{|\alpha|}\alpha\cdot d(b)$ shows this fails whenever $d(b)\neq 0$.
+Thus multiplication by a degree-$n$ class is not well-defined.
+
+\emph{Case \(\boldsymbol{t_{n]}}\).}
+Here degree $n$ is \(\ker d^n\subset C^n\). Let $x\in\ker d^n$ and $y\in C^m$ with $m>0$.
+Then $xy\in C^{n+m}$, but $t_{n]}C^\ast$ vanishes in degrees \(>n\); hence closure under
+multiplication forces $xy=0$ in the truncated object, which is incompatible with the
+canonical inclusion \(t_{n]}C^\ast\to C^\ast\) being multiplicative unless all such products
+already vanish in $C^\ast$ (e.g.\ $C^{>0}=0$). Therefore one cannot make $t_{n]}$ into a
+cdga with the desired property in general.
+\end{proof}
+
+The failure above explains Remark~1.2.25: degree-$n$ multiplication in $t_{[n}C^\ast$
+depends on choices of representatives, unless the complex is concentrated in degree $0$.
+
+\paragraph{The correct (good) truncation that \emph{is} a cdga.}
+
+\begin{definition}[Good connective truncation]\label{def:good-trunc}
+For $n\in\mathbb{Z}$ define the \emph{good lower truncation} $\tau_{\ge n}^{\mathrm{dg}}C^\ast$ by
+\[
+\bigl(\tau_{\ge n}^{\mathrm{dg}}C^\ast\bigr)^k :=
+\begin{cases}
+0 & k<n,\\
+Z^n:=\ker(d:C^n\to C^{n+1}) & k=n,\\
+C^k & k>n,
+\end{cases}
+\]
+with differential the restriction of $d$ (i.e.\ $Z^n\hookrightarrow C^{n+1}$ via $d$) and
+multiplication induced from $C^\ast$ by restriction. The unit is the same as in $C^\ast$.
+\end{definition}
+
+\begin{proposition}\label{prop:good-trunc-is-cdga}
+If $C^\ast$ is a cdga, then $\tau_{\ge n}^{\mathrm{dg}}C^\ast$ is a cdga and the canonical map
+\[
+\pi_{\ge n}: C^\ast \longrightarrow \tau_{\ge n}^{\mathrm{dg}}C^\ast
+\]
+is a cdga morphism. Moreover, $\pi_{\ge n}$ induces isomorphisms
+$H^k(C^\ast)\cong H^k(\tau_{\ge n}^{\mathrm{dg}}C^\ast)$ for all $k>n$.
+\end{proposition}
+
+\begin{proof}
+Closure under multiplication: degrees $>n$ are unchanged; for degree $n$ we use
+$Z^n\subset C^n$, and if $x\in Z^n$, $y\in Z^m$ then
+$d(xy)=d(x)\,y+(-1)^n x\,d(y)=0$, so $xy\in Z^{n+m}$; if $y\in C^m$ with $m>n$,
+then $xy\in C^{n+m}$ which belongs to $\tau_{\ge n}^{\mathrm{dg}}C^{n+m}$.
+Leibniz and graded commutativity are inherited from $C^\ast$.
+The cohomology claim is the standard property of good truncation (as in
+Remark~\ref{rmk:trunc-cohom-iso}, with $Z^n$ replacing $C^n/B^n$ at degree $n$).
+\end{proof}
+
+\begin{remark}[Why the good truncation works; why the na\"\i ve one fails]
+The obstacle in $t_{[n}$ is the quotient $C^n/B^n$ at degree $n$:
+$B^\ast$ is \emph{not} a multiplicative ideal in a general cdga, so multiplication by classes
+$[a]\in C^n/B^n$ is not well-defined. Replacing $C^n/B^n$ by the submodule $Z^n$ avoids
+quotients and keeps multiplicativity. Dually, no honest upper truncation can be a sub/cokernel
+cdga functor in general because degrees \(>n\) interact multiplicatively with lower degrees.
+\end{remark}
+
+\paragraph{Some positive special cases.}
+
+\begin{proposition}[When upper truncation behaves]\label{prop:upper-special}
+Suppose $C^\ast$ is \emph{connective} ($C^{<0}=0$) and \emph{square-zero above $n$}, i.e.
+$C^{>n}\cdot C^{\ge 0}=0$. Then $t_{n]}C^\ast$ inherits a cdga structure (as a quotient cdga)
+and $\iota:t_{n]}C^\ast\to C^\ast$ is a cdga morphism.
+\end{proposition}
+
+\begin{proof}
+Under the hypothesis $C^{>n}\cdot C^{\ge 0}=0$, products never leave the range $\le n$,
+so cutting off degrees \(>n\) is closed under multiplication. Since $\ker d^n\subset C^n$ is
+a subring and $d$ is still a derivation, the usual quotient-by-degrees construction defines a cdga.
+\end{proof}
+
+\begin{example}[Trivial case]\label{ex:deg0}
+If $C^\ast$ is concentrated in degree $0$ (an ordinary commutative ring),
+then all the truncations coincide with $C^\ast$ and are cdga's.
+This is the only truly general case where both $t_{[n}$ and $t_{n]}$ behave without
+extra hypotheses (cf.\ Proposition~\ref{prop:naive-fails}).
+\end{example}
+
+\paragraph{Homotopical truncations (Postnikov) and cdga’s.}
+In derived settings one often wants Postnikov truncations \(\tau_{\ge n},\tau_{\le n}\)
+in the \emph{derived} category. There, truncations exist functorially and preserve
+multiplicative structure \emph{up to coherent homotopy}. Concretely, for cdga’s in arbitrary
+characteristic, one passes to \(E_\infty\)–algebras and performs truncations in that model,
+then (in characteristic \(0\)) rectifies back to cdga’s. At the strict (underived) level, the
+only unconditional, strictly multiplicative truncation is the good connective one
+from Definition~\ref{def:good-trunc}.
+
+\subsection{Truncations of cdga's at degree \texorpdfstring{$0$}{0}}\label{subsec:trunc-0}
+
+Let $(C^\ast,d,\cdot)$ be a commutative differential graded $A$--algebra (cdga), cohomological
+grading ($d:C^k\to C^{k+1}$). Recall the (complex-theoretic) truncations
+\[
+\bigl(t_{n]}C^\ast\bigr)^k=
+\begin{cases}
+C^k & k<n,\\
+Z^n:=\ker(d:C^n\to C^{n+1}) & k=n,\\
+0 & k>n,
+\end{cases}
+\qquad
+\bigl(t_{[n}C^\ast\bigr)^k=
+\begin{cases}
+0 & k<n,\\
+C^n/B^n & k=n,\\
+C^k & k>n,
+\end{cases}
+\]
+with the evident differentials ($B^n=d(C^{n-1})$). We write $t_{[0}t_{0]}C^\ast$ for the composite.
+
+\begin{remark}[Leibniz failure for $t_{n]}$ when $n>0$]\label{rmk:leb-fails-n>0}
+Assume $n>0$ and take $a\in \bigl(t_{n]}C^\ast\bigr)^r$, $b\in \bigl(t_{n]}C^\ast\bigr)^s$ with $r+s=n$
+and (say) $r\neq n$ (so $s<n$). In $C^\ast$ we have
+\[
+d(a\cdot b)\;=\;d(a)\cdot b+(-1)^r\,a\cdot d(b),
+\]
+and at least one of $d(a),d(b)$ need not vanish (because $r<n$ or $s<n$).
+But $\bigl(t_{n]}C^\ast\bigr)^{n+1}=0$, hence $d(a\cdot b)$ must be $0$ in $t_{n]}C^\ast$.
+Unless $d(a)\cdot b$ and $a\cdot d(b)$ both vanish \emph{in $C^\ast$}, the Leibniz rule is violated
+when viewed in $t_{n]}C^\ast$. Therefore $t_{n]}$ cannot in general carry a cdga structure compatible
+with the one on $C^\ast$ unless $n=0$.
+\end{remark}
+
+The only truncations that \emph{always} preserve a cdga structure are the ones at degree \(0\):
+
+\begin{equation}\label{eq:maps-1.7-1.8}
+t_{0]}C^\ast\;\longrightarrow\; C^\ast,
+\qquad
+t_{0]}C^\ast\;\longrightarrow\; t_{[0}\,t_{0]}C^\ast.
+\end{equation}
+
+\begin{proposition}\label{prop:t0-and-composite-are-cdga}
+Let $C^\ast$ be a cdga. Then $t_{0]}C^\ast$ and $t_{[0}t_{0]}C^\ast$ are cdga's. Moreover,
+the maps in \eqref{eq:maps-1.7-1.8} are morphisms of cdga's.
+\end{proposition}
+
+\begin{proof}
+\textbf{(A) The cdga $t_{0]}C^\ast$.}
+As a complex,
+\[
+\bigl(t_{0]}C^\ast\bigr)^k=
+\begin{cases}
+C^k & k<0,\\
+Z^0:=\ker(d:C^0\to C^1) & k=0,\\
+0 & k>0,
+\end{cases}
+\qquad d\ \text{the restriction of }d \text{ on }k<0.
+\]
+Define the multiplication $\cdot$ on $t_{0]}C^\ast$ by
+\[
+a\cdot b\ :=
+\begin{cases}
+ab & \deg a,\deg b\le 0,\\
+0 & \text{otherwise},
+\end{cases}
+\]
+where $ab$ is the product in $C^\ast$.
+
+\emph{Well-definedness in degree $0$.}
+If $a,b\in Z^0$, then
+$d(ab)=d(a)b+a\,d(b)=0$, so $ab\in Z^0$. For other degrees, the rule is tautological.
+
+\emph{Associativity/commutativity.}
+Inherited from $C^\ast$ on the only nontrivial case (both degrees $\le 0$); the zero
+cases are automatic.
+
+\emph{Leibniz rule.}
+Let $\delta$ be the differential on $t_{0]}C^\ast$ (restriction of $d$). The only nontrivial
+checks are when at least one factor has degree $0$.
+
+If $\deg a=0$, $\deg b<0$, then $\delta(a\cdot b)=d(ab)=d(a)b+a\,d(b)=a\,d(b)=a\cdot \delta(b)$,
+while $\delta(a)\cdot b=d(a)\,b=0$. Hence $\delta(a\cdot b)=\delta(a)\cdot b+(-1)^{\deg a}a\cdot \delta(b)$.
+
+If $\deg a<0$, $\deg b=0$, then $\delta(a\cdot b)=d(ab)=d(a)b+(-1)^{\deg a}a\,d(b)=d(a)b$,
+and $\delta(a)\cdot b=d(a)b$, $a\cdot\delta(b)=a\,d(b)=0$. Again Leibniz holds.
+If both degrees are $0$ the three terms vanish. Therefore $t_{0]}C^\ast$ is a cdga.
+
+\emph{The map $t_{0]}C^\ast\to C^\ast$.}
+This is the inclusion on $k<0$ and on $Z^0\hookrightarrow C^0$, and zero above; it clearly
+preserves multiplication and differentials, hence is a cdga morphism.
+
+\smallskip
+\textbf{(B) The cdga $t_{[0}t_{0]}C^\ast$.}
+As a complex,
+\[
+\bigl(t_{[0}t_{0]}C^\ast\bigr)^k=
+\begin{cases}
+0 & k<0,\\
+Z^0/B^{-1} & k=0\quad (B^{-1}:=d(C^{-1})),\\
+C^k & k>0,
+\end{cases}
+\]
+with $d$ induced from $C^\ast$. Define the product $\star$ by
+\[
+(a+ B^{-1})\ \star\ (b+B^{-1})\ :=
+\begin{cases}
+ab + B^{-1} & \deg a=\deg b=0,\\
+0 & \text{otherwise}.
+\end{cases}
+\]
+\emph{Well-definedness in degree $0$.}
+If we change representatives $a\mapsto a+d(a')$, $b\mapsto b+d(b')$ with $a',b'\in C^{-1}$, then
+\[
+(a+d a')(b+d b')=ab+d(a'b)+a\,d(b')+d(a')\,d(b').
+\]
+Now $d(a'b)\in B^{-1}$, and $a\,d(b')=d(ab')-d(a)\,b'\in B^{-1}$ because $a\in Z^0$.
+Also $d(a')\,d(b')=d(a'\,d(b'))\in B^{-1}$. Hence the class of $ab$ in $Z^0/B^{-1}$ is
+independent of representatives.
+
+\emph{Associativity/commutativity.}
+Immediate in degree $0$ from $C^\ast$; zero elsewhere, hence automatic.
+
+\emph{Leibniz rule.}
+Trivial: if any factor has $\deg\neq 0$, every term is zero; for degree $0$, all three
+terms are in degree $0$ and $d$ vanishes on $Z^0/B^{-1}$.
+
+\emph{The map $t_{0]}C^\ast\to t_{[0}t_{0]}C^\ast$.}
+This is the projection $Z^0\twoheadrightarrow Z^0/B^{-1}$ in degree $0$ and zero elsewhere;
+it respects the multiplications by the definitions above, so it is a cdga morphism.
+\end{proof}
+
+\begin{corollary}\label{cor:qi-acyclic-except-0}
+If $C^\ast$ is a cdga with $H^k(C^\ast)=0$ for $k\neq 0$, then both maps
+\[
+t_{0]}C^\ast\longrightarrow C^\ast,
+\qquad
+t_{0]}C^\ast\longrightarrow t_{[0}t_{0]}C^\ast
+\]
+are quasi-isomorphisms of cdga's.
+\end{corollary}
+
+\begin{proof}
+On cohomology, $t_{0]}C^\ast\to C^\ast$ induces isomorphisms in degrees $<0$ (identity)
+and in degree $0$ (since $H^0(C^\ast)\cong Z^0/B^{-1}$ and $H^0(t_{0]}C^\ast)=Z^0$ maps onto it
+with kernel $B^{-1}$), and there is no cohomology above $0$. Similarly, the projection
+$t_{0]}C^\ast\to t_{[0}t_{0]}C^\ast$ kills exactly $B^{-1}$ in degree $0$ and is an isomorphism on
+the only surviving cohomology group; elsewhere both sides have zero cohomology. Hence both are quasi-isomorphisms.
+\end{proof}
+
+\begin{remark}[On replacing a cdga by a ring in degree zero]\label{rmk:replace-by-H0}
+Under the hypothesis of Corollary~\ref{cor:qi-acyclic-except-0} we deduce that $C^\ast$
+is quasi-isomorphic (as a cdga) to the ordinary ring $H^0(C^\ast)$ concentrated in degree $0$.
+This is frequently exploited in computations: one may treat a ring as a cdga (and conversely)
+whenever cohomology is concentrated in degree $0$.
+
+Two caveats:
+(i) the maps $t_{0]}\to C^\ast$ and $t_{0]}\to t_{[0}t_{0]}$ point in different directions, so neither
+alone is the quasi-isomorphism $C^\ast\to H^0(C^\ast)$; one passes to the homotopy category
+(localizing at quasi-isomorphisms) to invert them.
+(ii) Strict categorical forgetful functors to complexes can lose information after localization.
+These issues mirror the monoidal non-compatibility discussed for Dold--Kan; a robust resolution
+is to work with $E_\infty$–algebras, where commutativity is preserved \emph{up to coherent homotopy}
+and such truncation/rectification procedures are homotopically meaningful.
+\end{remark}
+
+\subsection{\texorpdfstring{$E_\infty$}{E-infinity}-algebras}\label{subsec:Einfty}
+
+Informally, an $E_\infty$–algebra over a commutative ring $R$ is a
+``commutative dg–algebra up to coherent homotopies'': the multiplication is
+associative and commutative only up to homotopies, which themselves satisfy
+higher coherence conditions.
+
+\begin{definition}[$E_\infty$–algebra (operadic viewpoint)]
+Fix a cofibrant $E_\infty$–operad $\mathcal{E}$ in the symmetric monoidal
+category of chain complexes $\Ch(R)$ (with the usual tensor and Koszul signs).
+An \emph{$E_\infty$–algebra over $R$} is an algebra over $\mathcal{E}$, i.e.\ a
+chain complex $A\in\Ch(R)$ equipped with structure maps
+\[
+\mathcal{E}(n)\otimes A^{\otimes n}\longrightarrow A\qquad(n\ge 0)
+\]
+compatible with the operad compositions, units and symmetric actions.
+A morphism of $E_\infty$–algebras is a morphism of $\mathcal{E}$–algebras.
+\end{definition}
+
+\begin{remark}[Homotopical purpose]
+Choosing $\mathcal{E}$ cofibrant makes the category $\EAlg_R$ homotopically
+well-behaved (model structure transferred from $\Ch(R)$): weak equivalences and
+fibrations are created by the forgetful functor to $\Ch(R)$. Thus
+``equivalence of $E_\infty$–algebras'' means quasi-isomorphism on underlying
+complexes.
+\end{remark}
+
+\subsubsection*{A warm-up: \texorpdfstring{$A_\infty$}{A-infinity}–algebras}
+
+\begin{definition}[$A_\infty$–algebra (Stasheff)]
+An \emph{$A_\infty$–algebra} over $R$ is a graded $R$–module $A$ with degree
+$2-n$ operations
+\[
+m_n:A^{\otimes n}\longrightarrow A\qquad(n\ge 1)
+\]
+satisfying the Stasheff identities
+\[
+\sum_{r+s+t=n}(-1)^{r+st}\,
+m_{r+1+t}\bigl(\Id^{\otimes r}\otimes m_s\otimes \Id^{\otimes t}\bigr)=0
+\qquad(n\ge 1).
+\]
+Here $m_1$ is a differential ($m_1^2=0$), $m_2$ is associative up to the
+homotopy $m_3$, the homotopy $m_3$ is coherent up to $m_4$, and so on.
+A strict dga is an $A_\infty$–algebra with $m_n=0$ for $n\ge 3$.
+\end{definition}
+
+\begin{example}[Classical sources]
+Singular cochains $C^\ast(X;R)$ carry natural $A_\infty$ (indeed $E_\infty$)
+structures; the higher $m_n$ encode the classical cup-$i$ operations
+and their compatibilities (Steenrod operations in mod-$p$ homology).
+\end{example}
+
+\subsubsection*{From cdga’s to \texorpdfstring{$E_\infty$}{E-infinity}: rectification vs.\ coherence}
+
+Two operads play a central role: the \emph{commutative} operad $\Com$ and a
+chosen cofibrant $E_\infty$–operad $\mathcal{E}$ equipped with a weak
+equivalence of operads $\mathcal{E}\to\Com$.
+
+\begin{remark}\label{fact:cdga-to-Einfty}
+Any commutative differential graded $R$–algebra (cdga) admits a canonical
+$E_\infty$–structure: viewing a cdga as a $\Com$–algebra and pulling back
+along $\mathcal{E}\to\Com$ yields an $\mathcal{E}$–algebra on the same
+underlying complex.
+\end{remark}
+
+\begin{proof}[Explanation]
+A cdga is, by definition, an algebra over $\Com$. Composition with the operad
+map $\mathcal{E}\to\Com$ gives an $\mathcal{E}$–algebra structure; underlying
+differential and multiplication do not change, only the higher coherences are
+now governed by $\mathcal{E}$ (trivial for strict cdga’s).
+\end{proof}
+
+\begin{remark}\label{fact:morphism}
+A morphism of cdga’s is (by the same pullback) a morphism of the corresponding
+$E_\infty$–algebras.
+\end{remark}
+
+\begin{proof}[Explanation]
+Algebra maps over $\Com$ compose with $\mathcal{E}\to\Com$ to give
+$\mathcal{E}$–algebra maps. Functoriality is immediate.
+\end{proof}
+
+\begin{remark}\label{fact:qi}
+A quasi-isomorphism of cdga’s is a weak equivalence of the corresponding
+$E_\infty$–algebras. In particular, it becomes invertible in the homotopy
+category $\Ho(\EAlg_R)$ (admits a homotopy inverse).
+\end{remark}
+
+\begin{proof}[Explanation]
+The forgetful functor $\EAlg_R\to\Ch(R)$ creates weak equivalences; hence an
+underlying quasi-isomorphism is a weak equivalence in $\EAlg_R$. Passing to the
+homotopy category inverts such maps.
+\end{proof}
+
+\begin{remark}[Characteristic issues and rectification]
+Over a characteristic $0$ ring (e.g.\ $\mathbb{Q}$), there is a Quillen
+equivalence between $E_\infty$–algebras and cdga’s (``rectification''):
+every $E_\infty$–algebra is weakly equivalent to a strict cdga. In positive
+characteristic this fails in general; divided power phenomena (and
+Dyer–Lashof/Steenrod operations) obstruct strict commutativity, which is
+precisely why $E_\infty$–algebras are the correct replacement for cdga’s.
+\end{remark}
+
+\subsubsection*{Basic properties and examples}
+
+\begin{example}[CoChains are $E_\infty$]
+For any simplicial set (or CW complex) $X$, the cochain complex $C^\ast(X;R)$
+admits a natural $E_\infty$–structure refining the cup product. The induced
+product on cohomology is the usual graded-commutative cup product.
+\end{example}
+
+\begin{example}[Strict cdga’s as $E_\infty$ with trivial higher operations]
+If $A$ is a cdga, its image in $\EAlg_R$ has all ``higher'' operations
+strictly determined by the ordinary multiplication—no extra homotopies are
+needed. Thus cdga’s embed fully faithfully into $E_\infty$–algebras via
+Fact~\ref{fact:cdga-to-Einfty}.
+\end{example}
+
+\begin{remark}[Why $E_\infty$ solves §\ref{subsec:simplicial-to-dga} issues]
+Dold–Kan does not preserve the \emph{symmetric monoidal structure} strictly.
+Replacing strict commutativity by $E_\infty$–commutativity yields functors and
+equivalences that are homotopically natural (e.g.\ normalized chains of a
+simplicial commutative ring form an $E_\infty$–algebra canonically; in
+characteristic $0$ this rectifies to a cdga).
+\end{remark}
+
+\subsubsection*{Optional: $A_\infty$ morphisms (for intuition)}
+A morphism $f:A\to B$ of $A_\infty$–algebras is a collection of maps
+$f_n:A^{\otimes n}\to B$ of degree $1-n$ satisfying identities paralleling the
+Stasheff relations (compatibility with $m_\bullet$). A strict dga map is the
+special case $f_1$ a chain map and $f_n=0$ for $n\ge 2$.
+This mirrors the $E_\infty$ situation where higher coherences also decorate
+morphisms in a homotopically meaningful way.
+
+\medskip
+
+Summarizing the items requested in Facts~1.2.30:
+\begin{enumerate}
+\item Every cdga is canonically an $E_\infty$–algebra (pullback along
+$\mathcal{E}\to\Com$).
+\item Every cdga morphism is a morphism of $E_\infty$–algebras.
+\item Every quasi-isomorphism of cdga’s is a weak equivalence in $\EAlg_R$; hence
+an isomorphism in $\Ho(\EAlg_R)$ and admits a homotopy inverse there.
+\end{enumerate}
+These are the precise formal underpinnings of the ``black box'' you flagged at the
+end of \S\ref{subsec:trunc-0}: $E_\infty$–algebras provide the homotopically correct
+framework where cdga’s and rings can be compared and replaced up to equivalence.
+
